@@ -1,13 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
-function Sidebar({ sidebarOpen, setSidebarOpen }) {
+function Sidebar({ sidebarOpen, setSidebarOpen, onTabChange }) {
   const location = useLocation();
   const { pathname } = location;
   const page = pathname.split("/")[1];
-
-  const trigger = useRef(null);
   const sidebar = useRef(null);
+
+  function tabChange(pathname) {
+    onTabChange(pathname);
+  }
 
   return (
     <div className="lg:w-64">
@@ -74,18 +76,39 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
         {/* Links */}
         <div>
           <h3 className="text-xs uppercase text-gray-500 font-semibold pl-3">
-            Pages
+            Παραγγελίες
           </h3>
           <ul className="mt-3">
             {/**Incomings */}
-            <Incomings page={page} />
-            <GettingReady page={page} />
-            <Finished page={page} />
-            <Products page={page} />
-            <Ingredients page={page} />
-            <Settings page={page} />
+            <Incomings
+              page={page}
+              onTabChange={(pathname) => tabChange(pathname)}
+            />
+            <GettingReady
+              page={page}
+              onTabChange={(pathname) => tabChange(pathname)}
+            />
+            <Finished
+              page={page}
+              onTabChange={(pathname) => tabChange(pathname)}
+            />
+            <h3 className="text-xs uppercase text-gray-500 font-semibold pl-3">
+              Κατάστημα
+            </h3>
+            <Products
+              page={page}
+              onTabChange={(pathname) => tabChange(pathname)}
+            />
+            <Ingredients
+              page={page}
+              onTabChange={(pathname) => tabChange(pathname)}
+            />
+            <Settings
+              page={page}
+              onTabChange={(pathname) => tabChange(pathname)}
+            />
             {/* Dashboard */}
-            <li
+            {/* <li
               className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
                 page === "" && "bg-gray-900"
               }`}
@@ -124,9 +147,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   <span className="text-sm font-medium">Dashboard</span>
                 </div>
               </NavLink>
-            </li>
+            </li> */}
             {/* Customers */}
-            <li
+            {/* <li
               className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
                 page === "customers" && "bg-gray-900"
               }`}
@@ -159,9 +182,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   <span className="text-sm font-medium">Customers</span>
                 </div>
               </NavLink>
-            </li>
+            </li> */}
             {/* Orders */}
-            <li
+            {/* <li
               className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
                 page === "orders" && "bg-gray-900"
               }`}
@@ -199,18 +222,18 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       />
                     </svg>
                     <span className="text-sm font-medium">Orders</span>
-                  </div>
-                  {/* Badge */}
-                  <div className="flex flex-shrink-0 ml-2">
+                  </div> */}
+            {/* Badge */}
+            {/* <div className="flex flex-shrink-0 ml-2">
                     <span className="inline-flex items-center justify-center h-5 text-xs font-medium text-white bg-indigo-500 px-2 rounded-sm">
                       4
                     </span>
                   </div>
                 </div>
               </NavLink>
-            </li>
+            </li> */}
             {/* Campaigns */}
-            <li
+            {/* <li
               className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
                 page === "campaigns" && "bg-gray-900"
               }`}
@@ -243,9 +266,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   <span className="text-sm font-medium">Campaigns</span>
                 </div>
               </NavLink>
-            </li>
+            </li> */}
             {/* Team */}
-            <li
+            {/* <li
               className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
                 page.startsWith("team-") && "bg-gray-900"
               }`}
@@ -277,9 +300,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       />
                     </svg>
                     <span className="text-sm font-medium">Team</span>
-                  </div>
-                  {/* Icon */}
-                  <div className="flex flex-shrink-0 ml-2">
+                  </div> */}
+            {/* Icon */}
+            {/* <div className="flex flex-shrink-0 ml-2">
                     <svg
                       className={`w-3 h-3 flex-shrink-0 ml-1 fill-current text-gray-400 ${
                         page.startsWith("team-") && "transform rotate-180"
@@ -319,9 +342,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   </NavLink>
                 </li>
               </ul>
-            </li>
+            </li> */}
             {/* Messages */}
-            <li
+            {/* <li
               className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
                 page === "messages" && "bg-gray-900"
               }`}
@@ -354,9 +377,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   <span className="text-sm font-medium">Messages</span>
                 </div>
               </NavLink>
-            </li>
+            </li> */}
             {/* Tasks */}
-            <li
+            {/* <li
               className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
                 page === "tasks" && "bg-gray-900"
               }`}
@@ -395,9 +418,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   <span className="text-sm font-medium">Tasks</span>
                 </div>
               </NavLink>
-            </li>
+            </li> */}
             {/* Applications */}
-            <li
+            {/* <li
               className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
                 page === "applications" && "bg-gray-900"
               }`}
@@ -450,9 +473,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   <span className="text-sm font-medium">Applications</span>
                 </div>
               </NavLink>
-            </li>
+            </li> */}
             {/* Settings */}
-            <li
+            {/* <li
               className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
                 page === "settings" && "bg-gray-900"
               }`}
@@ -497,7 +520,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   <span className="text-sm font-medium">Settings</span>
                 </div>
               </NavLink>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>
@@ -505,16 +528,17 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
   );
 }
 
-const Incomings = ({ page }) => {
+const Incomings = ({ page, onTabChange }) => {
   return (
     <li
       className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
-        page === "incomings" && "bg-gray-900"
+        page === "incoming" && "bg-gray-900"
       }`}
     >
       <NavLink
         exact
-        to="/"
+        to="/incoming"
+        onClick={() => onTabChange("incoming")}
         className={`block text-gray-200 hover:text-white transition duration-150 ${
           page === "incomings" && "hover:text-gray-200"
         }`}
@@ -527,7 +551,7 @@ const Incomings = ({ page }) => {
   );
 };
 
-const GettingReady = ({ page }) => {
+const GettingReady = ({ page, onTabChange }) => {
   return (
     <li
       className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
@@ -536,19 +560,20 @@ const GettingReady = ({ page }) => {
     >
       <NavLink
         exact
-        to="/"
+        to="/getting_ready"
+        onClick={() => onTabChange("getting_ready")}
         className={`block text-gray-200 hover:text-white transition duration-150 ${
           page === "getting_ready" && "hover:text-gray-200"
         }`}
       >
         <div className="flex flex-grow">
-          <span className="text-sm font-medium"> Ετοιμάζοντε</span>
+          <span className="text-sm font-medium"> Ετοιμάζονται</span>
         </div>
       </NavLink>
     </li>
   );
 };
-const Finished = ({ page }) => {
+const Finished = ({ page, onTabChange }) => {
   return (
     <li
       className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
@@ -557,7 +582,8 @@ const Finished = ({ page }) => {
     >
       <NavLink
         exact
-        to="/"
+        to="/finished"
+        onClick={() => onTabChange("finished")}
         className={`block text-gray-200 hover:text-white transition duration-150 ${
           page === "finished" && "hover:text-gray-200"
         }`}
@@ -570,7 +596,7 @@ const Finished = ({ page }) => {
   );
 };
 
-const Products = ({ page }) => {
+const Products = ({ page, onTabChange }) => {
   return (
     <li
       className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
@@ -579,7 +605,8 @@ const Products = ({ page }) => {
     >
       <NavLink
         exact
-        to="/"
+        to="/products"
+        onClick={() => onTabChange("products")}
         className={`block text-gray-200 hover:text-white transition duration-150 ${
           page === "products" && "hover:text-gray-200"
         }`}
@@ -592,7 +619,7 @@ const Products = ({ page }) => {
   );
 };
 
-const Ingredients = ({ page }) => {
+const Ingredients = ({ page, onTabChange }) => {
   return (
     <li
       className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
@@ -601,7 +628,8 @@ const Ingredients = ({ page }) => {
     >
       <NavLink
         exact
-        to="/"
+        to="/ingredients"
+        onClick={() => onTabChange("ingredients")}
         className={`block text-gray-200 hover:text-white transition duration-150 ${
           page === "ingredients" && "hover:text-gray-200"
         }`}
@@ -613,7 +641,7 @@ const Ingredients = ({ page }) => {
     </li>
   );
 };
-const Settings = ({ page }) => {
+const Settings = ({ page, onTabChange }) => {
   return (
     <li
       className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
@@ -622,7 +650,8 @@ const Settings = ({ page }) => {
     >
       <NavLink
         exact
-        to="/"
+        to="/settings"
+        onClick={() => onTabChange("settings")}
         className={`block text-gray-200 hover:text-white transition duration-150 ${
           page === "settings" && "hover:text-gray-200"
         }`}

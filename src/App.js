@@ -15,7 +15,7 @@ function App() {
   return (
     <>
       <Switch>
-        <Route exact path="/" component={Dashboard} />
+        <Route exact path="/*" component={Dashboard} />
       </Switch>
     </>
   );
