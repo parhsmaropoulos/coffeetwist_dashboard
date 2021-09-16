@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "../css/slider.css";
 
 class Table extends Component {
   constructor(props) {
@@ -10,11 +11,15 @@ class Table extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props);
     this.setState({
       items: this.props.items,
     });
   }
+
+  changeAvailability = (id) => {
+    console.log(`Change availability of ${id}`);
+  };
+
   render() {
     return (
       <div className="col-span-full xl:col-span-8 bg-white shadow-lg rounded-sm border border-gray-200">
@@ -41,7 +46,10 @@ class Table extends Component {
               </thead>
               {/** Table body */}
               <tbody className="text-sm font-medium divide-y divide-gray-100">
-                <ItemTable items={this.state.items} />
+                <ItemTable
+                  items={this.state.items}
+                  changeAvailability={(id) => this.changeAvailability(id)}
+                />
               </tbody>
             </table>
           </div>
@@ -53,7 +61,7 @@ class Table extends Component {
 
 export default Table;
 
-const ItemTable = ({ items }) => {
+const ItemTable = ({ items, changeAvailability }) => {
   return (
     <>
       {items.length > 0 ? (
@@ -61,21 +69,21 @@ const ItemTable = ({ items }) => {
           return (
             <tr key={idx}>
               <td className="p-3">
-                <div className="flex text-left">{i.name}</div>
+                <div className="text-left">{i.name}</div>
               </td>
               <td className="p-3">
-                <div className="flex text-center text-green-500">{i.price}</div>
+                <div className="text-center text-green-500">{i.price}</div>
               </td>
               <td className="p-3">
-                {i.available ? (
-                  <div className="text-center text-green-500">
-                    <p>Available</p>
-                  </div>
-                ) : (
-                  <div className="text-center text-red-500">
-                    <p>Nott</p>
-                  </div>
-                )}
+                <div className="text-center">
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      onChange={() => changeAvailability(i.ID)}
+                    />
+                    <span className="slider round"></span>
+                  </label>
+                </div>
               </td>
             </tr>
           );

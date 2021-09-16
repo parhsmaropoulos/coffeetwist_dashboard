@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { get_request } from "../actions/lib";
 import Header from "./Header";
 import OptionBar from "./OptionBar";
+import OrdersSideBar from "./OrdersSideBar";
+import OrdersTable from "./OrdersTable";
 import Sidebar from "./Sidebar";
 import Table from "./Table";
 import TableBanner from "./TableBanner";
@@ -14,6 +16,10 @@ class Dashboard extends Component {
       products: [],
       categories: [],
       ingredients: [],
+      incoming: [],
+      getting_ready: [],
+      completed: [],
+      orders: [],
     };
   }
   componentDidMount() {
@@ -21,12 +27,20 @@ class Dashboard extends Component {
       page: this.props.location.pathname.split("/")[1],
     });
     this.get_products();
+    this.get_orders();
   }
 
   async get_products() {
     const products = await get_request("products/all", null);
     this.setState({
       products: products,
+    });
+  }
+
+  async get_orders() {
+    const orders = await get_request("admin/today", null);
+    this.setState({
+      orders: orders,
     });
   }
 
@@ -37,6 +51,17 @@ class Dashboard extends Component {
   }
 
   render() {
+    let table = "products";
+    if (
+      this.state.page === "incoming" ||
+      this.state.page === "completed" ||
+      this.state.page === "getting_ready"
+    ) {
+      table = "orders";
+    }
+    if (this.state.page === "settings") {
+      table = "settings";
+    }
     return (
       <div className="flex h-screen overflow-hidden">
         {/* sidebar */}
@@ -55,12 +80,24 @@ class Dashboard extends Component {
             {/**Dashboard actions banner */}
 
             {/* Cards */}
-            <div className="grid grid-cols-12 gap-6">
-              {/** OptionBar */}
-              <OptionBar page={this.state.page} />
-              {/** Table */}
-              <Table page={this.state.page} items={this.state.products} />
-            </div>
+            {table === "products" ? (
+              <div className="grid grid-cols-12 gap-6">
+                {/** OptionBar */}
+                <OptionBar page={this.state.page} />
+                {/** Table */}
+                <Table page={this.state.page} items={this.state.products} />
+              </div>
+            ) : (
+              <div className="grid grid-cols-12 gap-6">
+                {/** OptionBar */}
+                <OrdersSideBar page={this.state.page} />
+                {/** Table */}
+                <OrdersTable
+                  page={this.state.page}
+                  orders={this.state.orders}
+                />
+              </div>
+            )}
           </main>
         </div>
       </div>

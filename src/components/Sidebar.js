@@ -88,7 +88,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, onTabChange }) {
               page={page}
               onTabChange={(pathname) => tabChange(pathname)}
             />
-            <Finished
+            <Completed
               page={page}
               onTabChange={(pathname) => tabChange(pathname)}
             />
@@ -573,19 +573,19 @@ const GettingReady = ({ page, onTabChange }) => {
     </li>
   );
 };
-const Finished = ({ page, onTabChange }) => {
+const Completed = ({ page, onTabChange }) => {
   return (
     <li
       className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
-        page === "finished" && "bg-gray-900"
+        page === "completed" && "bg-gray-900"
       }`}
     >
       <NavLink
         exact
-        to="/finished"
-        onClick={() => onTabChange("finished")}
+        to="/completed"
+        onClick={() => onTabChange("completed")}
         className={`block text-gray-200 hover:text-white transition duration-150 ${
-          page === "finished" && "hover:text-gray-200"
+          page === "completed" && "hover:text-gray-200"
         }`}
       >
         <div className="flex flex-grow">
