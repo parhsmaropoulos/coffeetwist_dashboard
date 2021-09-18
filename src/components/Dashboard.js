@@ -43,7 +43,9 @@ class Dashboard extends Component {
   async get_orders() {
     const orders = await get_request("admin/today");
     this.setState({
-      orders: orders,
+      incoming: orders.incoming,
+      getting_ready: orders.getting_ready,
+      completed: orders.completed,
     });
   }
 
@@ -145,7 +147,9 @@ class Dashboard extends Component {
                   {/** Table */}
                   <OrdersTable
                     page={this.state.page}
-                    orders={this.state.orders}
+                    incoming={this.state.incoming}
+                    getting_ready={this.state.getting_ready}
+                    completed={this.state.completed}
                   />
                 </div>
               </div>

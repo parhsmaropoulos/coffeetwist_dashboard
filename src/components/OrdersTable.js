@@ -7,6 +7,9 @@ class OrdersTable extends Component {
     super(props);
     this.state = {
       orders: [],
+      accepted: [],
+      incoming: [],
+      completed: [],
       selectedTime: 10,
     };
   }
@@ -14,11 +17,21 @@ class OrdersTable extends Component {
   componentDidMount() {
     // console.log(this.props);
     this.setState({
-      orders: this.props.orders,
+      incoming: this.props.incoming,
+      accepted: this.props.getting_ready,
+      completed: this.props.completed,
     });
   }
   render() {
     const page = this.props.page;
+    let orders;
+    if (page === "incoming") {
+      orders = this.state.incoming;
+    } else if (page === "getting_ready") {
+      orders = this.state.accepted;
+    } else if (page === "completed") {
+      orders = this.state.completed;
+    }
     return (
       <div className="col-span-full xl:col-span-9 bg-white shadow-lg rounded-sm border border-gray-200">
         <header className="px-5 py-4 border-b border-gray-100">
@@ -26,8 +39,8 @@ class OrdersTable extends Component {
         </header>
         <div className="p-3">
           {/**Table*/}
-          <div className="overflow-x-auto">
-            <table className="table-auto w-full">
+          <div className="overflow-x-auto ">
+            <table className="table-auto  w-full ">
               {/**table header */}
               <thead className="text-xs uppercase text-gray-400 bg-gray-50 rounded-sm">
                 <tr>
@@ -40,9 +53,9 @@ class OrdersTable extends Component {
                 </tr>
               </thead>
               {/** Table body */}
-              <tbody className="text-sm font-medium divide-y divide-gray-100">
+              <tbody className="text-sm font-medium divide-y divide-black-300">
                 <OrderTable
-                  orders={this.state.orders}
+                  orders={orders}
                   page={page}
                   changeTime={(t) => this.setState({ selectedTime: t })}
                 />
@@ -60,11 +73,11 @@ export default OrdersTable;
 const OrderTable = ({ orders, page, changeTime }) => {
   return (
     <>
-      {orders.length > 0
+      {orders
         ? orders.map((i, idx) => {
             return (
               <tr key={idx}>
-                <td className="w-3/4">
+                <td className="w-3/4 pb-20">
                   <div className="border-t border-gray-200">
                     <dl>
                       <div className="bg-white-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -88,7 +101,8 @@ const OrderTable = ({ orders, page, changeTime }) => {
                           Διεύθυνση
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                          Ιασωνίδου 10, Ελληνικό
+                          {i.client_address_name} {i.client_address_number} ,{" "}
+                          {i.client_area_name} , {i.client_zip}
                         </dd>
                       </div>
                       <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
