@@ -6,23 +6,24 @@ class OptionBar extends Component {
     super(props);
     this.state = {
       page: "",
-      options: ["cat1", "cat2"],
+      categories: [],
     };
   }
   componentDidMount() {}
   render() {
     const page = this.props.page;
+    const categories = this.props.categories;
     const title =
       page === "products" ? "Product Categories" : "Ingredient Categories";
 
     return (
-      <div className="col-span-full xl:col-span-4 bg-white shadow-lg rounded-sm border border-gray-200">
+      <div className="col-span-full h-auto xl:col-span-4 bg-white shadow-lg rounded-sm border border-gray-200">
         <header className="px-5 py-4 border-b border-gray-100">
           <h2 className="font-semibold text-gray-800">{title}</h2>
         </header>
         <div className="p-3">
           <div className="overflow-x-auto">
-            <Sidebar page={page} options={this.state.options} />
+            <Sidebar page={page} options={categories} />
           </div>
         </div>
       </div>
@@ -33,7 +34,7 @@ class OptionBar extends Component {
 const Sidebar = ({ page, options }) => {
   return (
     <ul>
-      {options.length > 0
+      {options
         ? options.map((o, idx) => {
             return (
               <li

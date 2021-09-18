@@ -83,19 +83,27 @@ class Dashboard extends Component {
             {table === "products" ? (
               <div className="grid grid-cols-12 gap-6">
                 {/** OptionBar */}
-                <OptionBar page={this.state.page} />
+                <div className="col-span-2">
+                  <OptionBar page={this.state.page} />
+                </div>
                 {/** Table */}
-                <Table page={this.state.page} items={this.state.products} />
+                <div className="col-span-10">
+                  <Table page={this.state.page} items={this.state.products} />
+                </div>
               </div>
             ) : (
               <div className="grid grid-cols-12 gap-6">
                 {/** OptionBar */}
-                <OrdersSideBar page={this.state.page} />
-                {/** Table */}
-                <OrdersTable
-                  page={this.state.page}
-                  orders={this.state.orders}
-                />
+                <div className="col-span-2 h-auto">
+                  <OrdersSideBar page={this.state.page} />
+                </div>
+                <div className="col-span-10">
+                  {/** Table */}
+                  <OrdersTable
+                    page={this.state.page}
+                    orders={this.state.orders}
+                  />
+                </div>
               </div>
             )}
           </main>

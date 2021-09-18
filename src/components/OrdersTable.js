@@ -18,7 +18,6 @@ class OrdersTable extends Component {
     });
   }
   render() {
-    console.log(this.state);
     const page = this.props.page;
     return (
       <div className="col-span-full xl:col-span-9 bg-white shadow-lg rounded-sm border border-gray-200">
@@ -65,7 +64,7 @@ const OrderTable = ({ orders, page, changeTime }) => {
         ? orders.map((i, idx) => {
             return (
               <tr key={idx}>
-                <td className="p-8">
+                <td className="w-3/4">
                   <div className="border-t border-gray-200">
                     <dl>
                       <div className="bg-white-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -216,7 +215,7 @@ const OrderTable = ({ orders, page, changeTime }) => {
                     </dl>
                   </div>
                 </td>
-                <td className="p-4 flex items-start widht">
+                <td className="flex">
                   <ActionButtons
                     state={page}
                     changeTime={(t) => changeTime(t)}
@@ -233,24 +232,23 @@ const OrderTable = ({ orders, page, changeTime }) => {
 const timeOptions = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 
 const ActionButtons = ({ state, changeTime }) => {
-  console.log(state);
   let buttonA = {};
   let buttonB = {};
   let buttonC = {};
   let showTime = false;
   if (state === "incoming") {
     buttonA.text = "Print it";
-    buttonA.color = "bg-gray-400";
+    buttonA.color = "bg-gray-400 ";
     buttonB.text = "Accept";
     buttonB.color = "bg-green-400";
     buttonC.text = "Decline";
-    buttonC.color = "bg-red-400";
+    buttonC.color = "bg-red-400 ";
     showTime = true;
   } else if (state === "getting_ready") {
     buttonA.text = "Print it";
     buttonA.color = "bg-gray-400";
     buttonB.text = "Complete";
-    buttonB.color = "bg-green-400";
+    buttonB.color = "bg-green-400 ";
     buttonC.text = null;
   } else if (state === "completed") {
     buttonA.text = "Print it";
@@ -260,38 +258,41 @@ const ActionButtons = ({ state, changeTime }) => {
   }
 
   return (
-    <div className="grid grid-row gap-4 w-full">
+    <div className="grid grid-cols-3 gap-4">
       <button
-        className={`${buttonA.color} w-1/2 text-white font-bold py-1 px-1 rounded-full`}
+        className={`${buttonA.color} col-span-3  text-white font-bold py-1 px-1 rounded-full`}
       >
         {buttonA.text}
       </button>
-      {showTime ? (
-        <>
-          <label htmlFor="time">Επιλέξτε χρόνο:</label>
-          <select
-            id="time"
-            name="time"
-            onChange={(e) => changeTime(e.target.value)}
-          >
-            {timeOptions.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
-        </>
-      ) : (
-        <></>
-      )}
-
-      <div className="flex items-center">
+      <div className="col-span-3">
+        {showTime ? (
+          <>
+            <label htmlFor="time">Επιλέξτε χρόνο:</label>
+            <select
+              id="time"
+              name="time"
+              onChange={(e) => changeTime(e.target.value)}
+            >
+              {timeOptions.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+          </>
+        ) : (
+          <></>
+        )}
+      </div>
+      <div className="col-start-1 col-end-2">
         {" "}
         <button
           className={`${buttonB.color} text-white font-bold py-2 px-4 rounded-full`}
         >
           {buttonB.text}
         </button>
+      </div>
+      <div className="col-end-4 col-span-1">
         <button
           className={`${buttonC.color}
         text-white font-bold py-2 px-4 rounded-full`}
