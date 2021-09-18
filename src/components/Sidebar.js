@@ -576,12 +576,13 @@ const GettingReady = ({ page, onTabChange }) => {
 const Completed = ({ page, onTabChange }) => {
   return (
     <li
+      key={page}
       className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
         page === "completed" && "bg-gray-900"
       }`}
     >
       <NavLink
-        exact
+        exact={true}
         to="/completed"
         onClick={() => onTabChange("completed")}
         className={`block text-gray-200 hover:text-white transition duration-150 ${

@@ -11,6 +11,9 @@ import TableBanner from "./TableBanner";
 class Dashboard extends Component {
   constructor(props) {
     super(props);
+    this.eventSource = new EventSource(
+      "http://localhost:8080/sse/events/admin"
+    );
     this.state = {
       page: "",
       products: [],
@@ -23,7 +26,59 @@ class Dashboard extends Component {
       selectedCategory: "",
     };
   }
+
+  async recieveOrder(order) {
+    let data = JSON.parse(order.data);
+    // console.log(data);
+    this.setState({ incoming: this.state.incoming.push(data.order) });
+    // this.props.get_order(data.order);
+
+    // this.setState({
+    //   selectedTab: "Εισερχόμενες",
+    // });
+  }
+
+  // async acceptOrder(order) {
+  //   let data = {
+  //     id: order.ID,
+  //     accepted: true,
+  //     time: this.state.selected_time,
+  //     from: order.from,
+  //   };
+  //   await this.props.post_request(
+  //     `http://localhost:8080/sse/acceptorder`,
+  //     data,
+  //     ACCEPT_ORDER
+  //   );
+
+  //   let orders = this.state.orders;
+  //   const newOrders = orders.filter((ord) => ord.ID !== data.id);
+  //   this.setState({
+  //     orders: newOrders,
+  //   });
+  // }
+
+  // async rejectOrder(order) {
+  //   let data = {
+  //     id: order.ID,
+  //     accepted: false,
+  //     time: 0,
+  //     from: order.from,
+  //   };
+  //   await this.props.post_request(
+  //     `http://localhost:8080/sse/acceptorder`,
+  //     data,
+  //     ACCEPT_ORDER
+  //   );
+  //   let orders = this.state.orders;
+  //   const newOrders = orders.filter((ord) => ord.ID !== data.id);
+  //   this.setState({
+  //     orders: newOrders,
+  //   });
+  // }
+
   componentDidMount() {
+    this.eventSource.onmessage = (e) => this.recieveOrder(e);
     this.setState({
       page: this.props.location.pathname.split("/")[1],
     });
