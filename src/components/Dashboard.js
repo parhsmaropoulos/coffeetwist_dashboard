@@ -20,6 +20,7 @@ class Dashboard extends Component {
       getting_ready: [],
       completed: [],
       orders: [],
+      selectedCategory: "",
     };
   }
   componentDidMount() {
@@ -28,19 +29,36 @@ class Dashboard extends Component {
     });
     this.get_products();
     this.get_orders();
+    this.get_categories();
+    this.get_ingredients();
   }
 
   async get_products() {
-    const products = await get_request("products/all", null);
+    const products = await get_request("products/all");
     this.setState({
       products: products,
     });
   }
 
   async get_orders() {
-    const orders = await get_request("admin/today", null);
+    const orders = await get_request("admin/today");
     this.setState({
       orders: orders,
+    });
+  }
+
+  async get_categories() {
+    const categories = await get_request("product_category/all");
+    this.setState({
+      categories: categories,
+    });
+  }
+
+  async get_ingredients() {
+    const res = await get_request("ingredients/all");
+    this.setState({
+      ingredients: res.ingredients,
+      ingredientCategories: res.categories,
     });
   }
 
@@ -48,6 +66,18 @@ class Dashboard extends Component {
     this.setState({
       page: name,
     });
+  }
+
+  onCategoryChange(name) {
+    if (this.state.page === "ingredients") {
+      this.setState({
+        selectedCategory: name,
+      });
+    } else {
+      this.setState({
+        selectedCategory: this.state.categories.find((c) => c.name === name),
+      });
+    }
   }
 
   render() {
@@ -58,9 +88,12 @@ class Dashboard extends Component {
       this.state.page === "getting_ready"
     ) {
       table = "orders";
-    }
-    if (this.state.page === "settings") {
+    } else if (this.state.page === "settings") {
       table = "settings";
+    } else if (this.state.page === "products") {
+      table = "products";
+    } else if (this.state.page === "ingredients") {
+      table = "ingredients";
     }
     return (
       <div className="flex h-screen overflow-hidden">
@@ -80,24 +113,35 @@ class Dashboard extends Component {
             {/**Dashboard actions banner */}
 
             {/* Cards */}
-            {table === "products" ? (
+            {table === "products" || table === "ingredients" ? (
               <div className="grid grid-cols-12 gap-6">
                 {/** OptionBar */}
                 <div className="col-span-2">
-                  <OptionBar page={this.state.page} />
+                  <OptionBar
+                    page={this.state.page}
+                    categories={this.state.categories}
+                    selectedCategory={this.state.selectedCategory}
+                    onChangeCategory={(c) => this.onCategoryChange(c)}
+                    ingredientCategories={this.state.ingredientCategories}
+                  />
                 </div>
                 {/** Table */}
                 <div className="col-span-10">
-                  <Table page={this.state.page} items={this.state.products} />
+                  <Table
+                    selectedCategory={this.state.selectedCategory}
+                    page={this.state.page}
+                    products={this.state.products}
+                    ingredients={this.state.ingredients}
+                  />
                 </div>
               </div>
             ) : (
               <div className="grid grid-cols-12 gap-6">
                 {/** OptionBar */}
-                <div className="col-span-2 h-auto">
+                {/* <div className="col-span-2 h-auto">
                   <OrdersSideBar page={this.state.page} />
-                </div>
-                <div className="col-span-10">
+                </div> */}
+                <div className="col-start-2 col-span-10">
                   {/** Table */}
                   <OrdersTable
                     page={this.state.page}

@@ -22,7 +22,7 @@ class OrdersTable extends Component {
     return (
       <div className="col-span-full xl:col-span-9 bg-white shadow-lg rounded-sm border border-gray-200">
         <header className="px-5 py-4 border-b border-gray-100">
-          <h2 className="font-semibold text-gray-800">Orders</h2>
+          <h2 className="font-semibold text-gray-800">Παραγγελίες</h2>
         </header>
         <div className="p-3">
           {/**Table*/}
@@ -32,10 +32,10 @@ class OrdersTable extends Component {
               <thead className="text-xs uppercase text-gray-400 bg-gray-50 rounded-sm">
                 <tr>
                   <th className="p-8">
-                    <div className="font-semibold text-left">Details</div>
+                    <div className="font-semibold text-left">Λεπτομέριες</div>
                   </th>
                   <th className="p-4">
-                    <div className="font-semibold text-center">Action</div>
+                    <div className="font-semibold text-center">Επιλογές</div>
                   </th>
                 </tr>
               </thead>
@@ -238,7 +238,7 @@ const ActionButtons = ({ state, changeTime }) => {
   let showTime = false;
   if (state === "incoming") {
     buttonA.text = "Print it";
-    buttonA.color = "bg-gray-400 ";
+    buttonA.color = "bg-gray-400";
     buttonB.text = "Accept";
     buttonB.color = "bg-green-400";
     buttonC.text = "Decline";

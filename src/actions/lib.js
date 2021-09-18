@@ -37,23 +37,25 @@ import { current_url } from "../utils/util";
 //   }
 // };
 
-export async function get_request(url, dispatch_type) {
+export async function get_request(url) {
   try {
     let auth_config = config;
     const res = await axios.get(current_url + url, auth_config);
     console.log(res);
-    //   dispatch({
-    //     type: dispatch_type,
-    //     data: res.data.data,
-    //   });
     return res.data.data;
   } catch (e) {
-    //   console.log(e);
     alert("Error with get request");
-    //   dispatch({
-    //     type: SNACKBAR_ERROR,
-    //     message: "Error with get request",
-    //   });
+  }
+}
+
+export async function put_request(url) {
+  try {
+    let auth_config = config;
+    const res = await axios.put(current_url + url, auth_config);
+    console.log(res);
+    return res.data.data;
+  } catch (e) {
+    alert("Error with get request");
   }
 }
 
