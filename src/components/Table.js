@@ -20,18 +20,40 @@ class Table extends Component {
   }
 
   changeIngrdientAvailability = (id) => {
-    console.log(`Change availability of ${id}`);
+    this.changeAvailability(id, "ingredient");
+  };
+
+  changeProductAvailability = (id) => {
+    this.changeAvailability(id, "product");
   };
 
   async changeAvailability(id, type) {
     if (type === "product") {
-      const res = await put_request(`/products/${id}/change_availability`);
+      const newProduct = await put_request(
+        `products/${id}/change_availability`
+      );
+      let newProducts = this.state.products;
+      const index = newProducts.findIndex((p) => p.ID === newProduct.ID);
+      if (index !== -1) {
+        newProducts[index] = newProduct;
+      }
+      this.setState({
+        products: newProducts,
+      });
     } else {
+      const newIngredient = await put_request(
+        `ingredients/${id}/change_availability`
+      );
+      let newIngredients = this.state.ingredients;
+      const index = newIngredients.findIndex((p) => p.ID === newIngredient.ID);
+      if (index !== -1) {
+        newIngredients[index] = newIngredient;
+      }
+      this.setState({
+        products: newIngredients,
+      });
     }
   }
-  changeProductAvailability = (id) => {
-    console.log(`Change availability of ${id}`);
-  };
 
   render() {
     const page = this.props.page;
@@ -91,7 +113,7 @@ export default Table;
 const ItemTable = ({ products, changeAvailability, selectedCategory }) => {
   return (
     <>
-      {products.length > 0
+      {products
         ? products.map((i, idx) => {
             if (i.category_id === selectedCategory.ID) {
               return (
@@ -132,7 +154,7 @@ const IngredientsTable = ({
 }) => {
   return (
     <>
-      {ingredients.length > 0
+      {ingredients
         ? ingredients.map((i, idx) => {
             if (i.category === selectedCategory) {
               return (

@@ -55,7 +55,7 @@ export async function put_request(url) {
     console.log(res);
     return res.data.data;
   } catch (e) {
-    alert("Error with get request");
+    alert("Error with put request");
   }
 }
 
