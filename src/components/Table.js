@@ -64,33 +64,31 @@ export default Table;
 const ItemTable = ({ items, changeAvailability }) => {
   return (
     <>
-      {items.length > 0 ? (
-        items.map((i, idx) => {
-          return (
-            <tr key={idx}>
-              <td className="p-3">
-                <div className="text-left">{i.name}</div>
-              </td>
-              <td className="p-3">
-                <div className="text-center text-green-500">{i.price}</div>
-              </td>
-              <td className="p-3">
-                <div className="text-center">
-                  <label className="switch">
-                    <input
-                      type="checkbox"
-                      onChange={() => changeAvailability(i.ID)}
-                    />
-                    <span className="slider round"></span>
-                  </label>
-                </div>
-              </td>
-            </tr>
-          );
-        })
-      ) : (
-        <null></null>
-      )}
+      {items.length > 0
+        ? items.map((i, idx) => {
+            return (
+              <tr key={idx}>
+                <td className="p-3">
+                  <div className="text-left">{i.name}</div>
+                </td>
+                <td className="p-3">
+                  <div className="text-center text-green-500">{i.price}</div>
+                </td>
+                <td className="p-3">
+                  <div className="text-center">
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        onChange={() => changeAvailability(i.ID)}
+                      />
+                      <span className="slider round"></span>
+                    </label>
+                  </div>
+                </td>
+              </tr>
+            );
+          })
+        : null}
     </>
   );
 };

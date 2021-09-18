@@ -6,6 +6,7 @@ class OrdersSideBar extends Component {
     super(props);
     this.state = {
       options: ["incoming", "getting ready", "completed"],
+      names: ["Εισερχόμενες", "Ετοιμάζονται", "Ολοκληρωμένες"],
     };
   }
   componentDidMount() {}
@@ -20,7 +21,11 @@ class OrdersSideBar extends Component {
         </header>
         <div className="p-3">
           <div className="overflow-x-auto">
-            <Sidebar page={page} options={this.state.options} />
+            <Sidebar
+              page={page}
+              options={this.state.options}
+              names={this.state.names}
+            />
           </div>
         </div>
       </div>
@@ -28,35 +33,33 @@ class OrdersSideBar extends Component {
   }
 }
 
-const Sidebar = ({ page, options }) => {
+const Sidebar = ({ page, options, names }) => {
   return (
     <ul>
-      {options.length > 0 ? (
-        options.map((o, idx) => {
-          return (
-            <li
-              className={`px-2 py-2 rounded-sm mb-0.5 last:mb-0 ${
-                page === "settings" && "bg-black-900"
-              }`}
-              key={idx}
-            >
-              <NavLink
-                exact
-                to={`/${o.replace(" ", "_")}`}
-                className={`block text-black-200 hover:text-white transition duration-150 inline-block ${
-                  page === "settings" && "hover:text-black-200"
+      {options.length > 0
+        ? options.map((o, idx) => {
+            return (
+              <li
+                className={`px-2 py-2 rounded-sm mb-0.5 last:mb-0 ${
+                  page === "settings" && "bg-black-900"
                 }`}
+                key={idx}
               >
-                <div className="flex flex-grow">
-                  <span className="text-sm font-medium"> {o}</span>
-                </div>
-              </NavLink>
-            </li>
-          );
-        })
-      ) : (
-        <null></null>
-      )}
+                <NavLink
+                  exact
+                  to={`/${o.replace(" ", "_")}`}
+                  className={`block text-black-200 hover:text-white transition duration-150 inline-block ${
+                    page === "settings" && "hover:text-black-200"
+                  }`}
+                >
+                  <div className="flex flex-grow">
+                    <span className="text-sm font-medium"> {names[idx]}</span>
+                  </div>
+                </NavLink>
+              </li>
+            );
+          })
+        : null}
     </ul>
   );
 };

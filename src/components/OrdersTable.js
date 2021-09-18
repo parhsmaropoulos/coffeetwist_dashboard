@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { Component } from "react";
 
 class OrdersTable extends Component {
@@ -5,6 +7,7 @@ class OrdersTable extends Component {
     super(props);
     this.state = {
       orders: [],
+      selectedTime: 10,
     };
   }
 
@@ -15,6 +18,7 @@ class OrdersTable extends Component {
     });
   }
   render() {
+    console.log(this.state);
     const page = this.props.page;
     return (
       <div className="col-span-full xl:col-span-9 bg-white shadow-lg rounded-sm border border-gray-200">
@@ -28,17 +32,21 @@ class OrdersTable extends Component {
               {/**table header */}
               <thead className="text-xs uppercase text-gray-400 bg-gray-50 rounded-sm">
                 <tr>
-                  <th className="p-9">
+                  <th className="p-8">
                     <div className="font-semibold text-left">Details</div>
                   </th>
-                  <th className="p-3">
+                  <th className="p-4">
                     <div className="font-semibold text-center">Action</div>
                   </th>
                 </tr>
               </thead>
               {/** Table body */}
               <tbody className="text-sm font-medium divide-y divide-gray-100">
-                <OrderTable orders={this.state.orders} page={page} />
+                <OrderTable
+                  orders={this.state.orders}
+                  page={page}
+                  changeTime={(t) => this.setState({ selectedTime: t })}
+                />
               </tbody>
             </table>
           </div>
@@ -50,136 +58,247 @@ class OrdersTable extends Component {
 
 export default OrdersTable;
 
-const OrderTable = ({ orders, page }) => {
+const OrderTable = ({ orders, page, changeTime }) => {
   return (
     <>
-      {orders.length > 0 ? (
-        orders.map((i, idx) => {
-          return (
-            <tr key={idx}>
-              <td className="p-9">
-                <div class="border-t border-gray-200">
-                  <dl>
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                      <dt class="text-sm font-medium text-gray-500">
-                        User Details
-                      </dt>
-                      <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        Margot Foster
-                      </dd>
-                    </div>
-                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                      <dt class="text-sm font-medium text-gray-500">
-                        Application for
-                      </dt>
-                      <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        Backend Developer
-                      </dd>
-                    </div>
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                      <dt class="text-sm font-medium text-gray-500">
-                        Email address
-                      </dt>
-                      <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        margotfoster@example.com
-                      </dd>
-                    </div>
-                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                      <dt class="text-sm font-medium text-gray-500">
-                        Salary expectation
-                      </dt>
-                      <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        $120,000
-                      </dd>
-                    </div>
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                      <dt class="text-sm font-medium text-gray-500">About</dt>
-                      <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        Fugiat ipsum ipsum deserunt culpa aute sint do nostrud
-                        anim incididunt cillum culpa consequat. Excepteur qui
-                        ipsum aliquip consequat sint. Sit id mollit nulla mollit
-                        nostrud in ea officia proident. Irure nostrud pariatur
-                        mollit ad adipisicing reprehenderit deserunt qui eu.
-                      </dd>
-                    </div>
-                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                      <dt class="text-sm font-medium text-gray-500">
-                        Products
-                      </dt>
-                      <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        <ul
-                          role="list"
-                          class="border border-gray-200 rounded-md divide-y divide-gray-200"
-                        >
-                          <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
-                            <div class="w-0 flex-1 flex items-center">
-                              <svg
-                                class="flex-shrink-0 h-5 w-5 text-gray-400"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                aria-hidden="true"
+      {orders.length > 0
+        ? orders.map((i, idx) => {
+            return (
+              <tr key={idx}>
+                <td className="p-8">
+                  <div className="border-t border-gray-200">
+                    <dl>
+                      <div className="bg-white-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-500">
+                          Αριθμός Παραγγελίας
+                        </dt>
+                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                          {i.ID}
+                        </dd>
+                      </div>
+                      <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-500">
+                          Ώρα Παραγγελίας
+                        </dt>
+                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                          {i.CreatedAt.slice(11, 19)}
+                        </dd>
+                      </div>
+                      <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-500">
+                          Διεύθυνση
+                        </dt>
+                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                          Ιασωνίδου 10, Ελληνικό
+                        </dd>
+                      </div>
+                      <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-500">
+                          Όνομα
+                        </dt>
+                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                          {i.name} {i.surname}
+                        </dd>
+                      </div>
+                      <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-500">
+                          Τηλέφωνο
+                        </dt>
+                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                          {i.phone}
+                        </dd>
+                      </div>
+                      <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-500">
+                          Όροφος
+                        </dt>
+                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                          {i.floor}
+                        </dd>
+                      </div>
+                      <div className="bg-white-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-500">
+                          Κουδούνι
+                        </dt>
+                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                          {i.bell_name}
+                        </dd>
+                      </div>
+                      <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-500">
+                          Σύνολο
+                        </dt>
+                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                          {i.after_discount_price.toFixed(2)} €
+                        </dd>
+                      </div>
+                      <div className="bg-white-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-500">
+                          Πληρωμή
+                        </dt>
+                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                          {i.payment_type}
+                        </dd>
+                      </div>
+                      <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-500">
+                          Προϊόντα
+                        </dt>
+                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                          <ul
+                            role="list"
+                            className="border border-gray-200 rounded-md divide-y divide-gray-200"
+                          >
+                            {/* Map products */}
+                            {i.products.map((p) => (
+                              <li
+                                key={p.ID}
+                                className="pl-3 pr-4 py-3 flex flex-wrap  items-center justify-between text-sm"
                               >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
-                              <span class="ml-2 flex-1 w-0 truncate">
-                                resume_back_end_developer.pdf
-                              </span>
-                            </div>
-                            <div class="ml-4 flex-shrink-0">
-                              <a
-                                href="#"
-                                class="font-medium text-indigo-600 hover:text-indigo-500"
-                              >
-                                Download
-                              </a>
-                            </div>
-                          </li>
-                          <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
-                            <div class="w-0 flex-1 flex items-center">
-                              <svg
-                                class="flex-shrink-0 h-5 w-5 text-gray-400"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                aria-hidden="true"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
-                              <span class="ml-2 flex-1 w-0 truncate">
-                                coverletter_back_end_developer.pdf
-                              </span>
-                            </div>
-                            <div class="ml-4 flex-shrink-0">
-                              <a
-                                href="#"
-                                class="font-medium text-indigo-600 hover:text-indigo-500"
-                              >
-                                Download
-                              </a>
-                            </div>
-                          </li>
-                        </ul>
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-              </td>
-              <td className="p-3">Actionss</td>
-            </tr>
-          );
-        })
-      ) : (
-        <null></null>
-      )}
+                                <div className="w-0 flex-1 flex items-center">
+                                  <span className="ml-2 flex-1 w-0 truncate">
+                                    {p.item_name}
+                                  </span>
+                                </div>
+                                <div className="ml-4 flex-shrink-0">
+                                  <span className="ml-2 flex-1 w-0 truncate">
+                                    {" "}
+                                    x {p.quantity}
+                                  </span>
+                                </div>
+                                <div className="ml-4 flex-shrink-0">
+                                  <span className="ml-2 flex-1 w-0 truncate">
+                                    {" "}
+                                    {p.total_price.toFixed(2)} €
+                                  </span>
+                                </div>
+                                {p.option_answers ? (
+                                  <div className="w-full divide-y divide-light-blue-400">
+                                    <ul>
+                                      {p.option_answers.map((a) => (
+                                        <li key={a}>
+                                          <span className="text-gray-500">
+                                            {" "}
+                                            + {a}
+                                          </span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                ) : null}
+                                {p.extra_ingredients ? (
+                                  <div className="w-full divide-y divide-light-blue-400">
+                                    <ul>
+                                      {p.extra_ingredients.map((ing) => (
+                                        <li key={ing}>
+                                          <span className="text-gray-500">
+                                            {" "}
+                                            + {ing}
+                                          </span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                ) : null}
+                              </li>
+                            ))}
+                          </ul>
+                        </dd>
+                      </div>
+                      <div className="bg-white-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-500">
+                          Σχόλια
+                        </dt>
+                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                          Αδερφή
+                        </dd>
+                      </div>
+                    </dl>
+                  </div>
+                </td>
+                <td className="p-4 flex items-start widht">
+                  <ActionButtons
+                    state={page}
+                    changeTime={(t) => changeTime(t)}
+                  />
+                </td>
+              </tr>
+            );
+          })
+        : null}
     </>
+  );
+};
+
+const timeOptions = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+
+const ActionButtons = ({ state, changeTime }) => {
+  console.log(state);
+  let buttonA = {};
+  let buttonB = {};
+  let buttonC = {};
+  let showTime = false;
+  if (state === "incoming") {
+    buttonA.text = "Print it";
+    buttonA.color = "bg-gray-400";
+    buttonB.text = "Accept";
+    buttonB.color = "bg-green-400";
+    buttonC.text = "Decline";
+    buttonC.color = "bg-red-400";
+    showTime = true;
+  } else if (state === "getting_ready") {
+    buttonA.text = "Print it";
+    buttonA.color = "bg-gray-400";
+    buttonB.text = "Complete";
+    buttonB.color = "bg-green-400";
+    buttonC.text = null;
+  } else if (state === "completed") {
+    buttonA.text = "Print it";
+    buttonA.color = "bg-gray-400";
+    buttonB.text = null;
+    buttonC.text = null;
+  }
+
+  return (
+    <div className="grid grid-row gap-4 w-full">
+      <button
+        className={`${buttonA.color} w-1/2 text-white font-bold py-1 px-1 rounded-full`}
+      >
+        {buttonA.text}
+      </button>
+      {showTime ? (
+        <>
+          <label htmlFor="time">Επιλέξτε χρόνο:</label>
+          <select
+            id="time"
+            name="time"
+            onChange={(e) => changeTime(e.target.value)}
+          >
+            {timeOptions.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+        </>
+      ) : (
+        <></>
+      )}
+
+      <div className="flex items-center">
+        {" "}
+        <button
+          className={`${buttonB.color} text-white font-bold py-2 px-4 rounded-full`}
+        >
+          {buttonB.text}
+        </button>
+        <button
+          className={`${buttonC.color}
+        text-white font-bold py-2 px-4 rounded-full`}
+        >
+          {buttonC.text}
+        </button>
+      </div>
+    </div>
   );
 };

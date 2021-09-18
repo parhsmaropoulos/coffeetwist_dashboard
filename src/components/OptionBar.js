@@ -33,32 +33,30 @@ class OptionBar extends Component {
 const Sidebar = ({ page, options }) => {
   return (
     <ul>
-      {options.length > 0 ? (
-        options.map((o, idx) => {
-          return (
-            <li
-              className={`px-2 py-2 rounded-sm mb-0.5 last:mb-0 ${
-                page === "settings" && "bg-black-900"
-              }`}
-              key={idx}
-            >
-              <NavLink
-                exact
-                to={`/${page}/${o}`}
-                className={`block text-black-200 hover:text-white transition duration-150 inline-block ${
-                  page === "settings" && "hover:text-black-200"
+      {options.length > 0
+        ? options.map((o, idx) => {
+            return (
+              <li
+                className={`px-2 py-2 rounded-sm mb-0.5 last:mb-0 ${
+                  page === "settings" && "bg-black-900"
                 }`}
+                key={idx}
               >
-                <div className="flex flex-grow">
-                  <span className="text-sm font-medium"> {o}</span>
-                </div>
-              </NavLink>
-            </li>
-          );
-        })
-      ) : (
-        <null></null>
-      )}
+                <NavLink
+                  exact
+                  to={`/${page}/${o}`}
+                  className={`block text-black-200 hover:text-white transition duration-150 inline-block ${
+                    page === "settings" && "hover:text-black-200"
+                  }`}
+                >
+                  <div className="flex flex-grow">
+                    <span className="text-sm font-medium"> {o}</span>
+                  </div>
+                </NavLink>
+              </li>
+            );
+          })
+        : null}
     </ul>
   );
 };
