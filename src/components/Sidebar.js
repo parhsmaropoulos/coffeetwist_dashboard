@@ -32,7 +32,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, onTabChange }) {
         {/* Sidebar header */}
         <div className="flex justify-between mb-10 pr-3 sm:px-2">
           {/* Logo */}
-          <NavLink exact to="/" className="block">
+          <NavLink to="/" className="block">
             <svg width="32" height="32" viewBox="0 0 32 32">
               <defs>
                 <linearGradient
@@ -92,7 +92,10 @@ function Sidebar({ sidebarOpen, setSidebarOpen, onTabChange }) {
               page={page}
               onTabChange={(pathname) => tabChange(pathname)}
             />
-            <h3 className="text-xs uppercase text-gray-500 font-semibold pl-3">
+            <h3
+              key={9}
+              className="text-xs uppercase text-gray-500 font-semibold pl-3"
+            >
               Κατάστημα
             </h3>
             <Products
@@ -531,12 +534,13 @@ function Sidebar({ sidebarOpen, setSidebarOpen, onTabChange }) {
 const Incomings = ({ page, onTabChange }) => {
   return (
     <li
+      key={1}
       className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
         page === "incoming" && "bg-gray-900"
       }`}
     >
       <NavLink
-        exact
+        // exact
         to="/incoming"
         onClick={() => onTabChange("incoming")}
         className={`block text-gray-200 hover:text-white transition duration-150 ${
@@ -554,12 +558,13 @@ const Incomings = ({ page, onTabChange }) => {
 const GettingReady = ({ page, onTabChange }) => {
   return (
     <li
+      key={2}
       className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
         page === "getting_ready" && "bg-gray-900"
       }`}
     >
       <NavLink
-        exact
+        // exact
         to="/getting_ready"
         onClick={() => onTabChange("getting_ready")}
         className={`block text-gray-200 hover:text-white transition duration-150 ${
@@ -576,13 +581,13 @@ const GettingReady = ({ page, onTabChange }) => {
 const Completed = ({ page, onTabChange }) => {
   return (
     <li
-      key={page}
+      key={3}
       className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
         page === "completed" && "bg-gray-900"
       }`}
     >
       <NavLink
-        exact={true}
+        // exact
         to="/completed"
         onClick={() => onTabChange("completed")}
         className={`block text-gray-200 hover:text-white transition duration-150 ${
@@ -600,12 +605,13 @@ const Completed = ({ page, onTabChange }) => {
 const Products = ({ page, onTabChange }) => {
   return (
     <li
+      key={4}
       className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
         page === "products" && "bg-gray-900"
       }`}
     >
       <NavLink
-        exact
+        // exact
         to="/products"
         onClick={() => onTabChange("products")}
         className={`block text-gray-200 hover:text-white transition duration-150 ${
@@ -623,12 +629,13 @@ const Products = ({ page, onTabChange }) => {
 const Ingredients = ({ page, onTabChange }) => {
   return (
     <li
+      key={5}
       className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
         page === "ingredients" && "bg-gray-900"
       }`}
     >
       <NavLink
-        exact
+        // exact
         to="/ingredients"
         onClick={() => onTabChange("ingredients")}
         className={`block text-gray-200 hover:text-white transition duration-150 ${
@@ -645,12 +652,13 @@ const Ingredients = ({ page, onTabChange }) => {
 const Settings = ({ page, onTabChange }) => {
   return (
     <li
+      key={6}
       className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
         page === "settings" && "bg-gray-900"
       }`}
     >
       <NavLink
-        exact
+        // exact
         to="/settings"
         onClick={() => onTabChange("settings")}
         className={`block text-gray-200 hover:text-white transition duration-150 ${

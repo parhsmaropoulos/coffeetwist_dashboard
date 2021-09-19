@@ -46,7 +46,7 @@ const Sidebar = ({ page, options, names }) => {
                 key={idx}
               >
                 <NavLink
-                  exact
+                  // exact
                   to={`/${o.replace(" ", "_")}`}
                   className={`block text-black-200 hover:text-white transition duration-150 inline-block ${
                     page === "settings" && "hover:text-black-200"

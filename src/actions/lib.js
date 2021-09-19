@@ -48,14 +48,36 @@ export async function get_request(url) {
   }
 }
 
-export async function put_request(url) {
+export async function put_request(url, data) {
   try {
     let auth_config = config;
-    const res = await axios.put(current_url + url, auth_config);
+    const res = await axios.put(current_url + url, data, auth_config);
     console.log(res);
     return res.data.data;
   } catch (e) {
+    console.log(e.response);
     alert("Error with put request");
+  }
+}
+
+export async function post_request(url, data) {
+  try {
+    let auth_config = config;
+    const res = await axios.post(current_url + url, data, auth_config);
+    return res.data.data;
+  } catch (e) {
+    alert("Error with post request");
+  }
+}
+
+export async function accept_sse(url, data) {
+  try {
+    let auth_config = config;
+    await axios.post(current_url + url, data, auth_config);
+    return true;
+  } catch (e) {
+    alert("Error with post request");
+    return false;
   }
 }
 

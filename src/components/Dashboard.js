@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { get_request } from "../actions/lib";
+import { accept_sse, get_request, put_request } from "../actions/lib";
 import Header from "./Header";
 import OptionBar from "./OptionBar";
-import OrdersSideBar from "./OrdersSideBar";
 import OrdersTable from "./OrdersTable";
 import Sidebar from "./Sidebar";
 import Table from "./Table";
@@ -29,34 +28,82 @@ class Dashboard extends Component {
 
   async recieveOrder(order) {
     let data = JSON.parse(order.data);
-    // console.log(data);
     this.setState({ incoming: this.state.incoming.push(data.order) });
-    // this.props.get_order(data.order);
-
-    // this.setState({
-    //   selectedTab: "Εισερχόμενες",
-    // });
   }
 
-  // async acceptOrder(order) {
-  //   let data = {
-  //     id: order.ID,
-  //     accepted: true,
-  //     time: this.state.selected_time,
-  //     from: order.from,
-  //   };
-  //   await this.props.post_request(
-  //     `http://localhost:8080/sse/acceptorder`,
-  //     data,
-  //     ACCEPT_ORDER
-  //   );
+  async acceptOrder(order, time) {
+    let data = {
+      id: String(order.ID),
+      accepted: true,
+      time: time,
+      from: order.from_id,
+    };
+    const res = await accept_sse(`sse/acceptorder`, data);
+    if (res === true) {
+      const newOrder = await put_request(
+        `admin/orders/${data.id}/accept_order`,
+        { delivery_time: data.time }
+      );
+      let incoming = this.state.incoming;
+      let getting_ready = this.state.getting_ready;
+      const index = incoming.findIndex((p) => p.ID === newOrder.ID);
+      getting_ready.unshift(incoming[index]);
+      incoming.splice(index, 1);
+      this.setState({
+        incoming: incoming,
+        getting_ready: getting_ready,
+      });
+    }
+  }
 
-  //   let orders = this.state.orders;
-  //   const newOrders = orders.filter((ord) => ord.ID !== data.id);
-  //   this.setState({
-  //     orders: newOrders,
-  //   });
-  // }
+  async rejectOrder(order) {
+    let data = {
+      id: String(order.ID),
+      accepted: false,
+      time: 0,
+      from: order.from_id,
+    };
+    const res = await accept_sse(`sse/acceptorder`, data);
+    if (res === true) {
+      const newOrder = await put_request(
+        `admin/orders/${data.id}/cancel_order`,
+        null
+      );
+      let incoming = this.state.incoming;
+      // TODO create cancel order list
+      // let getting_ready = this.state.getting_ready;
+      const index = incoming.findIndex((p) => p.ID === newOrder.ID);
+      // getting_ready.unshift(incoming[index]);
+      incoming.splice(index, 1);
+      this.setState({
+        incoming: incoming,
+        // getting_ready: getting_ready,
+      });
+    }
+  }
+
+  async completeOrder(order) {
+    const newOrder = await put_request(
+      `admin/orders/${order.ID}/complete_order`,
+      null
+    );
+    console.log(newOrder);
+
+    let getting_ready = this.state.getting_ready;
+    let completed = this.state.completed;
+    const index = getting_ready.findIndex((p) => p.ID === newOrder.ID);
+    if (index !== -1) {
+      if (completed === null) {
+        completed = [];
+      }
+      completed.unshift(getting_ready[index]);
+      getting_ready.splice(index, 1);
+    }
+    this.setState({
+      getting_ready: getting_ready,
+      completed: completed,
+    });
+  }
 
   // async rejectOrder(order) {
   //   let data = {
@@ -205,6 +252,9 @@ class Dashboard extends Component {
                     incoming={this.state.incoming}
                     getting_ready={this.state.getting_ready}
                     completed={this.state.completed}
+                    acceptOrder={(order, time) => this.acceptOrder(order, time)}
+                    completeOrder={(order) => this.completeOrder(order)}
+                    rejectOrder={(order) => this.rejectOrder(order)}
                   />
                 </div>
               </div>

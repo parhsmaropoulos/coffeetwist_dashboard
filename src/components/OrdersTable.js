@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { Component } from "react";
+import { put_request } from "../actions/lib";
 
 class OrdersTable extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class OrdersTable extends Component {
       completed: this.props.completed,
     });
   }
+
   render() {
     const page = this.props.page;
     let orders;
@@ -57,7 +59,14 @@ class OrdersTable extends Component {
                 <OrderTable
                   orders={orders}
                   page={page}
-                  changeTime={(t) => this.setState({ selectedTime: t })}
+                  changeTime={(t) =>
+                    this.setState({ selectedTime: parseInt(t) })
+                  }
+                  acceptOrder={(order) =>
+                    this.props.acceptOrder(order, this.state.selectedTime)
+                  }
+                  completeOrder={(order) => this.props.completeOrder(order)}
+                  rejectOrder={(order) => this.props.rejectOrder(order)}
                 />
               </tbody>
             </table>
@@ -70,7 +79,14 @@ class OrdersTable extends Component {
 
 export default OrdersTable;
 
-const OrderTable = ({ orders, page, changeTime }) => {
+const OrderTable = ({
+  orders,
+  page,
+  changeTime,
+  acceptOrder,
+  completeOrder,
+  rejectOrder,
+}) => {
   return (
     <>
       {orders
@@ -163,9 +179,9 @@ const OrderTable = ({ orders, page, changeTime }) => {
                             className="border border-gray-200 rounded-md divide-y divide-gray-200"
                           >
                             {/* Map products */}
-                            {i.products.map((p) => (
+                            {i.products.map((p, idx) => (
                               <li
-                                key={p.ID}
+                                key={idx}
                                 className="pl-3 pr-4 py-3 flex flex-wrap  items-center justify-between text-sm"
                               >
                                 <div className="w-0 flex-1 flex items-center">
@@ -188,8 +204,8 @@ const OrderTable = ({ orders, page, changeTime }) => {
                                 {p.option_answers ? (
                                   <div className="w-full divide-y divide-light-blue-400">
                                     <ul>
-                                      {p.option_answers.map((a) => (
-                                        <li key={a}>
+                                      {p.option_answers.map((a, indx) => (
+                                        <li key={indx}>
                                           <span className="text-gray-500">
                                             {" "}
                                             + {a}
@@ -202,8 +218,8 @@ const OrderTable = ({ orders, page, changeTime }) => {
                                 {p.extra_ingredients ? (
                                   <div className="w-full divide-y divide-light-blue-400">
                                     <ul>
-                                      {p.extra_ingredients.map((ing) => (
-                                        <li key={ing}>
+                                      {p.extra_ingredients.map((ing, indx) => (
+                                        <li key={indx}>
                                           <span className="text-gray-500">
                                             {" "}
                                             + {ing}
@@ -231,8 +247,12 @@ const OrderTable = ({ orders, page, changeTime }) => {
                 </td>
                 <td className="flex">
                   <ActionButtons
+                    order={i}
                     state={page}
                     changeTime={(t) => changeTime(t)}
+                    acceptOrder={(order) => acceptOrder(order)}
+                    completeOrder={(order) => completeOrder(order)}
+                    rejectOrder={(order) => rejectOrder(order)}
                   />
                 </td>
               </tr>
@@ -245,7 +265,14 @@ const OrderTable = ({ orders, page, changeTime }) => {
 
 const timeOptions = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 
-const ActionButtons = ({ state, changeTime }) => {
+const ActionButtons = ({
+  order,
+  state,
+  changeTime,
+  acceptOrder,
+  completeOrder,
+  rejectOrder,
+}) => {
   let buttonA = {};
   let buttonB = {};
   let buttonC = {};
@@ -255,14 +282,17 @@ const ActionButtons = ({ state, changeTime }) => {
     buttonA.color = "bg-gray-400";
     buttonB.text = "Accept";
     buttonB.color = "bg-green-400";
+    buttonB.func = acceptOrder;
     buttonC.text = "Decline";
     buttonC.color = "bg-red-400 ";
+    buttonC.func = rejectOrder;
     showTime = true;
   } else if (state === "getting_ready") {
     buttonA.text = "Print it";
     buttonA.color = "bg-gray-400";
     buttonB.text = "Complete";
     buttonB.color = "bg-green-400 ";
+    buttonB.func = completeOrder;
     buttonC.text = null;
   } else if (state === "completed") {
     buttonA.text = "Print it";
@@ -302,6 +332,7 @@ const ActionButtons = ({ state, changeTime }) => {
         {" "}
         <button
           className={`${buttonB.color} text-white font-bold py-2 px-4 rounded-full`}
+          onClick={() => buttonB.func(order)}
         >
           {buttonB.text}
         </button>
@@ -310,6 +341,7 @@ const ActionButtons = ({ state, changeTime }) => {
         <button
           className={`${buttonC.color}
         text-white font-bold py-2 px-4 rounded-full`}
+          onClick={() => buttonC.func(order)}
         >
           {buttonC.text}
         </button>
