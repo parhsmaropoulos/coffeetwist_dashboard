@@ -1,8 +1,8 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { Switch, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import Dashboard from "./components/Dashboard";
+import HomePage from "./components/HomePage";
 
 function App() {
   const location = useLocation();
@@ -15,7 +15,8 @@ function App() {
   return (
     <>
       <Switch>
-        <Route exact path="/*" component={Dashboard} />
+        <Route exact path="/home" component={HomePage} />
+        <Route exact path="/" component={Dashboard} />
       </Switch>
     </>
   );
