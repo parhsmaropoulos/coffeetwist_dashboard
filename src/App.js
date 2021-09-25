@@ -16,7 +16,8 @@ function App() {
     <>
       <Switch>
         <Route exact path="/home" component={HomePage} />
-        <Route exact path="/" component={Dashboard} />
+        <Route exact path="/create/:string" component={Dashboard} />
+        <Route exact path="/*" component={Dashboard} />
       </Switch>
     </>
   );
