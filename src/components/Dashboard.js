@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { accept_sse, get_request, put_request } from "../actions/lib";
+import CreateForm from "./Forms/CreateItemForm";
 import Header from "./Header";
 import OptionBar from "./OptionBar";
 import OrdersTable from "./OrdersTable";
@@ -22,6 +23,7 @@ class Dashboard extends Component {
       getting_ready: [],
       completed: [],
       orders: [],
+      choices: [],
       selectedCategory: "",
     };
   }
@@ -105,25 +107,6 @@ class Dashboard extends Component {
     });
   }
 
-  // async rejectOrder(order) {
-  //   let data = {
-  //     id: order.ID,
-  //     accepted: false,
-  //     time: 0,
-  //     from: order.from,
-  //   };
-  //   await this.props.post_request(
-  //     `http://localhost:8080/sse/acceptorder`,
-  //     data,
-  //     ACCEPT_ORDER
-  //   );
-  //   let orders = this.state.orders;
-  //   const newOrders = orders.filter((ord) => ord.ID !== data.id);
-  //   this.setState({
-  //     orders: newOrders,
-  //   });
-  // }
-
   componentDidMount() {
     this.eventSource.onmessage = (e) => this.recieveOrder(e);
     this.setState({
@@ -133,12 +116,20 @@ class Dashboard extends Component {
     this.get_orders();
     this.get_categories();
     this.get_ingredients();
+    this.get_choices();
   }
 
   async get_products() {
     const products = await get_request("products/all");
     this.setState({
       products: products,
+    });
+  }
+
+  async get_choices() {
+    const choices = await get_request("product_choices/all");
+    this.setState({
+      choices: choices,
     });
   }
 
@@ -178,14 +169,16 @@ class Dashboard extends Component {
         selectedCategory: name,
       });
     } else {
+      // console.log(name);
       this.setState({
-        selectedCategory: this.state.categories.find((c) => c.name === name),
+        selectedCategory: name,
       });
     }
   }
 
   render() {
     let table = "products";
+    let showCreate = false;
     if (
       this.state.page === "incoming" ||
       this.state.page === "completed" ||
@@ -198,6 +191,19 @@ class Dashboard extends Component {
       table = "products";
     } else if (this.state.page === "ingredients") {
       table = "ingredients";
+    }
+    let createForm = "";
+    if (this.state.page.includes("create/")) {
+      showCreate = true;
+      if (this.state.page.includes("product")) {
+        createForm = "product";
+      } else if (this.state.page.includes("ingredient")) {
+        createForm = "ingredient";
+      } else if (this.state.page.includes("choice")) {
+        createForm = "choice";
+      } else if (this.state.page.includes("category")) {
+        createForm = "category";
+      }
     }
     return (
       <div className="flex h-screen overflow-hidden">
@@ -215,46 +221,60 @@ class Dashboard extends Component {
             {/**Welcome banner */}
             <TableBanner />
             {/**Dashboard actions banner */}
-
-            {/* Cards */}
-            {table === "products" || table === "ingredients" ? (
-              <div className="grid grid-cols-12 gap-6">
-                {/** OptionBar */}
-                <div className="col-span-2">
-                  <OptionBar
-                    page={this.state.page}
-                    categories={this.state.categories}
-                    selectedCategory={this.state.selectedCategory}
-                    onChangeCategory={(c) => this.onCategoryChange(c)}
-                    ingredientCategories={this.state.ingredientCategories}
-                  />
+            {showCreate === false ? (
+              table === "products" || table === "ingredients" ? (
+                <div className="grid grid-cols-12 gap-6">
+                  {/** OptionBar */}
+                  <div className="col-span-2">
+                    <OptionBar
+                      page={this.state.page}
+                      categories={this.state.categories}
+                      selectedCategory={this.state.selectedCategory}
+                      onChangeCategory={(c) => this.onCategoryChange(c)}
+                      ingredientCategories={this.state.ingredientCategories}
+                    />
+                  </div>
+                  {/** Table */}
+                  <div className="col-span-10">
+                    <Table
+                      selectedCategory={this.state.selectedCategory}
+                      page={this.state.page}
+                      products={this.state.products}
+                      ingredients={this.state.ingredients}
+                    />
+                  </div>
                 </div>
-                {/** Table */}
-                <div className="col-span-10">
-                  <Table
-                    selectedCategory={this.state.selectedCategory}
-                    page={this.state.page}
-                    products={this.state.products}
-                    ingredients={this.state.ingredients}
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className="grid grid-cols-12 gap-6">
-                {/** OptionBar */}
-                {/* <div className="col-span-2 h-auto">
+              ) : (
+                <div className="grid grid-cols-12 gap-6">
+                  {/** OptionBar */}
+                  {/* <div className="col-span-2 h-auto">
                   <OrdersSideBar page={this.state.page} />
                 </div> */}
+                  <div className="col-start-2 col-span-10">
+                    {/** Table */}
+                    <OrdersTable
+                      page={this.state.page}
+                      incoming={this.state.incoming}
+                      getting_ready={this.state.getting_ready}
+                      completed={this.state.completed}
+                      acceptOrder={(order, time) =>
+                        this.acceptOrder(order, time)
+                      }
+                      completeOrder={(order) => this.completeOrder(order)}
+                      rejectOrder={(order) => this.rejectOrder(order)}
+                    />
+                  </div>
+                </div>
+              )
+            ) : (
+              <div className="grid grid-cols-12 gap-6">
                 <div className="col-start-2 col-span-10">
-                  {/** Table */}
-                  <OrdersTable
-                    page={this.state.page}
-                    incoming={this.state.incoming}
-                    getting_ready={this.state.getting_ready}
-                    completed={this.state.completed}
-                    acceptOrder={(order, time) => this.acceptOrder(order, time)}
-                    completeOrder={(order) => this.completeOrder(order)}
-                    rejectOrder={(order) => this.rejectOrder(order)}
+                  <CreateForm
+                    page={createForm}
+                    categories={this.state.categories}
+                    choices={this.state.choices}
+                    ingredients={this.state.ingredients}
+                    ingredientCategories={this.state.ingredientCategories}
                   />
                 </div>
               </div>
