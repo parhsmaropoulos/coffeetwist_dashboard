@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { Component } from "react";
-import { put_request } from "../actions/lib";
 
 class OrdersTable extends Component {
   constructor(props) {
