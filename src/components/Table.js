@@ -140,6 +140,8 @@ const ItemTable = ({ products, changeAvailability, selectedCategory }) => {
                   </td>
                 </tr>
               );
+            } else {
+              return null;
             }
           })
         : null}
@@ -181,6 +183,8 @@ const IngredientsTable = ({
                   </td>
                 </tr>
               );
+            } else {
+              return null;
             }
           })
         : null}
