@@ -1,10 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
 function Sidebar({ sidebarOpen, setSidebarOpen, onTabChange }) {
   const location = useLocation();
   const { pathname } = location;
-  const page = pathname.split("/")[1];
+  let page = pathname.split("/")[1];
+  if (page === "create") {
+    page = pathname;
+  }
   const sidebar = useRef(null);
 
   function tabChange(pathname) {
@@ -81,449 +84,65 @@ function Sidebar({ sidebarOpen, setSidebarOpen, onTabChange }) {
           <ul className="mt-3">
             {/**Incomings */}
             <Incomings
+              key={"inc"}
               page={page}
               onTabChange={(pathname) => tabChange(pathname)}
             />
             <GettingReady
+              key={"gtrdy"}
               page={page}
               onTabChange={(pathname) => tabChange(pathname)}
             />
             <Completed
+              key={"cmplt"}
               page={page}
               onTabChange={(pathname) => tabChange(pathname)}
             />
-            <h3
-              key={9}
-              className="text-xs uppercase text-gray-500 font-semibold pl-3"
-            >
-              Κατάστημα
-            </h3>
+          </ul>
+          <h3 className="text-xs uppercase text-gray-500 font-semibold pl-3">
+            Κατάστημα
+          </h3>
+          <ul className="mt-3">
             <Products
+              key={"prods"}
               page={page}
               onTabChange={(pathname) => tabChange(pathname)}
             />
             <Ingredients
+              key={"ingrs"}
               page={page}
               onTabChange={(pathname) => tabChange(pathname)}
             />
             <Settings
+              key={"stngs"}
               page={page}
               onTabChange={(pathname) => tabChange(pathname)}
             />
-            {/* Dashboard */}
-            {/* <li
-              className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
-                page === "" && "bg-gray-900"
-              }`}
-            >
-              <NavLink
-                exact
-                to="/"
-                className={`block text-gray-200 hover:text-white transition duration-150 ${
-                  page === "" && "hover:text-gray-200"
-                }`}
-              >
-                <div className="flex flex-grow">
-                  <svg
-                    className="flex-shrink-0 h-6 w-6 mr-3"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      className={`fill-current text-gray-400 ${
-                        page === "" && "text-indigo-500"
-                      }`}
-                      d="M12 0C5.383 0 0 5.383 0 12s5.383 12 12 12 12-5.383 12-12S18.617 0 12 0z"
-                    />
-                    <path
-                      className={`fill-current text-gray-600 ${
-                        page === "" && "text-indigo-600"
-                      }`}
-                      d="M12 3c-4.963 0-9 4.037-9 9s4.037 9 9 9 9-4.037 9-9-4.037-9-9-9z"
-                    />
-                    <path
-                      className={`fill-current text-gray-400 ${
-                        page === "" && "text-indigo-200"
-                      }`}
-                      d="M12 15c-1.654 0-3-1.346-3-3 0-.462.113-.894.3-1.285L6 6l4.714 3.301A2.973 2.973 0 0112 9c1.654 0 3 1.346 3 3s-1.346 3-3 3z"
-                    />
-                  </svg>
-                  <span className="text-sm font-medium">Dashboard</span>
-                </div>
-              </NavLink>
-            </li> */}
-            {/* Customers */}
-            {/* <li
-              className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
-                page === "customers" && "bg-gray-900"
-              }`}
-            >
-              <NavLink
-                exact
-                to="/"
-                className={`block text-gray-200 hover:text-white transition duration-150 ${
-                  page === "customers" && "hover:text-gray-200"
-                }`}
-              >
-                <div className="flex flex-grow">
-                  <svg
-                    className="flex-shrink-0 h-6 w-6 mr-3"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      className={`fill-current text-gray-400 ${
-                        page === "customers" && "text-indigo-300"
-                      }`}
-                      d="M7 0l6 7H8v10H6V7H1z"
-                    />
-                    <path
-                      className={`fill-current text-gray-600 ${
-                        page === "customers" && "text-indigo-500"
-                      }`}
-                      d="M18 7v10h5l-6 7-6-7h5V7z"
-                    />
-                  </svg>
-                  <span className="text-sm font-medium">Customers</span>
-                </div>
-              </NavLink>
-            </li> */}
-            {/* Orders */}
-            {/* <li
-              className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
-                page === "orders" && "bg-gray-900"
-              }`}
-            >
-              <NavLink
-                exact
-                to="/"
-                className={`block text-gray-200 hover:text-white transition duration-150 ${
-                  page === "orders" && "hover:text-gray-200"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex flex-grow">
-                    <svg
-                      className="flex-shrink-0 h-6 w-6 mr-3"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        className={`fill-current text-gray-400 ${
-                          page === "orders" && "text-indigo-300"
-                        }`}
-                        d="M13 15l11-7L11.504.136a1 1 0 00-1.019.007L0 7l13 8z"
-                      />
-                      <path
-                        className={`fill-current text-gray-700 ${
-                          page === "orders" && "text-indigo-600"
-                        }`}
-                        d="M13 15L0 7v9c0 .355.189.685.496.864L13 24v-9z"
-                      />
-                      <path
-                        className={`fill-current text-gray-600 ${
-                          page === "orders" && "text-indigo-500"
-                        }`}
-                        d="M13 15.047V24l10.573-7.181A.999.999 0 0024 16V8l-11 7.047z"
-                      />
-                    </svg>
-                    <span className="text-sm font-medium">Orders</span>
-                  </div> */}
-            {/* Badge */}
-            {/* <div className="flex flex-shrink-0 ml-2">
-                    <span className="inline-flex items-center justify-center h-5 text-xs font-medium text-white bg-indigo-500 px-2 rounded-sm">
-                      4
-                    </span>
-                  </div>
-                </div>
-              </NavLink>
-            </li> */}
-            {/* Campaigns */}
-            {/* <li
-              className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
-                page === "campaigns" && "bg-gray-900"
-              }`}
-            >
-              <NavLink
-                exact
-                to="/"
-                className={`block text-gray-200 hover:text-white transition duration-150 ${
-                  page === "campaigns" && "hover:text-gray-200"
-                }`}
-              >
-                <div className="flex flex-grow">
-                  <svg
-                    className="flex-shrink-0 h-6 w-6 mr-3"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      className={`fill-current text-gray-600 ${
-                        page === "campaigns" && "text-indigo-500"
-                      }`}
-                      d="M20 7a.75.75 0 01-.75-.75 1.5 1.5 0 00-1.5-1.5.75.75 0 110-1.5 1.5 1.5 0 001.5-1.5.75.75 0 111.5 0 1.5 1.5 0 001.5 1.5.75.75 0 110 1.5 1.5 1.5 0 00-1.5 1.5A.75.75 0 0120 7zM4 23a.75.75 0 01-.75-.75 1.5 1.5 0 00-1.5-1.5.75.75 0 110-1.5 1.5 1.5 0 001.5-1.5.75.75 0 111.5 0 1.5 1.5 0 001.5 1.5.75.75 0 110 1.5 1.5 1.5 0 00-1.5 1.5A.75.75 0 014 23z"
-                    />
-                    <path
-                      className={`fill-current text-gray-400 ${
-                        page === "campaigns" && "text-indigo-300"
-                      }`}
-                      d="M17 23a1 1 0 01-1-1 4 4 0 00-4-4 1 1 0 010-2 4 4 0 004-4 1 1 0 012 0 4 4 0 004 4 1 1 0 010 2 4 4 0 00-4 4 1 1 0 01-1 1zM7 13a1 1 0 01-1-1 4 4 0 00-4-4 1 1 0 110-2 4 4 0 004-4 1 1 0 112 0 4 4 0 004 4 1 1 0 010 2 4 4 0 00-4 4 1 1 0 01-1 1z"
-                    />
-                  </svg>
-                  <span className="text-sm font-medium">Campaigns</span>
-                </div>
-              </NavLink>
-            </li> */}
-            {/* Team */}
-            {/* <li
-              className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
-                page.startsWith("team-") && "bg-gray-900"
-              }`}
-            >
-              <NavLink
-                exact
-                to="/"
-                className={`block text-gray-200 hover:text-white transition duration-150 ${
-                  page.startsWith("team-") && "hover:text-gray-200"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex flex-grow">
-                    <svg
-                      className="flex-shrink-0 h-6 w-6 mr-3"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        className={`fill-current text-gray-600 ${
-                          page.startsWith("team-") && "text-indigo-500"
-                        }`}
-                        d="M18.974 8H22a2 2 0 012 2v6h-2v5a1 1 0 01-1 1h-2a1 1 0 01-1-1v-5h-2v-6a2 2 0 012-2h.974zM20 7a2 2 0 11-.001-3.999A2 2 0 0120 7zM2.974 8H6a2 2 0 012 2v6H6v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5H0v-6a2 2 0 012-2h.974zM4 7a2 2 0 11-.001-3.999A2 2 0 014 7z"
-                      />
-                      <path
-                        className={`fill-current text-gray-400 ${
-                          page.startsWith("team-") && "text-indigo-300"
-                        }`}
-                        d="M12 6a3 3 0 110-6 3 3 0 010 6zm2 18h-4a1 1 0 01-1-1v-6H6v-6a3 3 0 013-3h6a3 3 0 013 3v6h-3v6a1 1 0 01-1 1z"
-                      />
-                    </svg>
-                    <span className="text-sm font-medium">Team</span>
-                  </div> */}
-            {/* Icon */}
-            {/* <div className="flex flex-shrink-0 ml-2">
-                    <svg
-                      className={`w-3 h-3 flex-shrink-0 ml-1 fill-current text-gray-400 ${
-                        page.startsWith("team-") && "transform rotate-180"
-                      }`}
-                      viewBox="0 0 12 12"
-                    >
-                      <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-                    </svg>
-                  </div>
-                </div>
-              </NavLink>
-              <ul
-                className={`pl-9 mt-1 ${!page.startsWith("team-") && "hidden"}`}
-              >
-                <li className="mb-1 last:mb-0">
-                  <NavLink
-                    exact
-                    to="/"
-                    className={`block text-gray-200 hover:text-white transition duration-150 ${
-                      page === "team-tabs" &&
-                      "text-indigo-400 hover:text-indigo-400"
-                    }`}
-                  >
-                    <span className="text-sm font-medium">Team - Tabs</span>
-                  </NavLink>
-                </li>
-                <li className="mb-1 last:mb-0">
-                  <NavLink
-                    exact
-                    to="/"
-                    className={`block text-gray-200 hover:text-white transition duration-150" ${
-                      page === "team-tiles" &&
-                      "text-indigo-400 hover:text-indigo-400"
-                    }`}
-                  >
-                    <span className="text-sm font-medium">Team - Tiles</span>
-                  </NavLink>
-                </li>
-              </ul>
-            </li> */}
-            {/* Messages */}
-            {/* <li
-              className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
-                page === "messages" && "bg-gray-900"
-              }`}
-            >
-              <NavLink
-                exact
-                to="/"
-                className={`block text-gray-200 hover:text-white transition duration-150 ${
-                  page === "messages" && "hover:text-gray-200"
-                }`}
-              >
-                <div className="flex flex-grow">
-                  <svg
-                    className="flex-shrink-0 h-6 w-6 mr-3"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      className={`fill-current text-gray-600 ${
-                        page === "messages" && "text-indigo-500"
-                      }`}
-                      d="M14.5 7c4.695 0 8.5 3.184 8.5 7.111 0 1.597-.638 3.067-1.7 4.253V23l-4.108-2.148a10 10 0 01-2.692.37c-4.695 0-8.5-3.184-8.5-7.11C6 10.183 9.805 7 14.5 7z"
-                    />
-                    <path
-                      className={`fill-current text-gray-400 ${
-                        page === "messages" && "text-indigo-300"
-                      }`}
-                      d="M11 1C5.477 1 1 4.582 1 9c0 1.797.75 3.45 2 4.785V19l4.833-2.416C8.829 16.85 9.892 17 11 17c5.523 0 10-3.582 10-8s-4.477-8-10-8z"
-                    />
-                  </svg>
-                  <span className="text-sm font-medium">Messages</span>
-                </div>
-              </NavLink>
-            </li> */}
-            {/* Tasks */}
-            {/* <li
-              className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
-                page === "tasks" && "bg-gray-900"
-              }`}
-            >
-              <NavLink
-                exact
-                to="/"
-                className={`block text-gray-200 hover:text-white transition duration-150 ${
-                  page === "tasks" && "hover:text-gray-200"
-                }`}
-              >
-                <div className="flex flex-grow">
-                  <svg
-                    className="flex-shrink-0 h-6 w-6 mr-3"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      className={`fill-current text-gray-600 ${
-                        page === "tasks" && "text-indigo-500"
-                      }`}
-                      d="M8 1v2H3v19h18V3h-5V1h7v23H1V1z"
-                    />
-                    <path
-                      className={`fill-current text-gray-600 ${
-                        page === "tasks" && "text-indigo-500"
-                      }`}
-                      d="M1 1h22v23H1z"
-                    />
-                    <path
-                      className={`fill-current text-gray-400 ${
-                        page === "tasks" && "text-indigo-300"
-                      }`}
-                      d="M15 10.586L16.414 12 11 17.414 7.586 14 9 12.586l2 2zM5 0h14v4H5z"
-                    />
-                  </svg>
-                  <span className="text-sm font-medium">Tasks</span>
-                </div>
-              </NavLink>
-            </li> */}
-            {/* Applications */}
-            {/* <li
-              className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
-                page === "applications" && "bg-gray-900"
-              }`}
-            >
-              <NavLink
-                exact
-                to="/"
-                className={`block text-gray-200 hover:text-white transition duration-150 ${
-                  page === "applications" && "hover:text-gray-200"
-                }`}
-              >
-                <div className="flex flex-grow">
-                  <svg
-                    className="flex-shrink-0 h-6 w-6 mr-3"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className={`fill-current text-gray-400 ${
-                        page === "applications" && "text-indigo-300"
-                      }`}
-                      cx="18.5"
-                      cy="5.5"
-                      r="4.5"
-                    />
-                    <circle
-                      className={`fill-current text-gray-600 ${
-                        page === "applications" && "text-indigo-500"
-                      }`}
-                      cx="5.5"
-                      cy="5.5"
-                      r="4.5"
-                    />
-                    <circle
-                      className={`fill-current text-gray-600 ${
-                        page === "applications" && "text-indigo-500"
-                      }`}
-                      cx="18.5"
-                      cy="18.5"
-                      r="4.5"
-                    />
-                    <circle
-                      className={`fill-current text-gray-400 ${
-                        page === "applications" && "text-indigo-300"
-                      }`}
-                      cx="5.5"
-                      cy="18.5"
-                      r="4.5"
-                    />
-                  </svg>
-                  <span className="text-sm font-medium">Applications</span>
-                </div>
-              </NavLink>
-            </li> */}
-            {/* Settings */}
-            {/* <li
-              className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
-                page === "settings" && "bg-gray-900"
-              }`}
-            >
-              <NavLink
-                exact
-                to="/"
-                className={`block text-gray-200 hover:text-white transition duration-150 ${
-                  page === "settings" && "hover:text-gray-200"
-                }`}
-              >
-                <div className="flex flex-grow">
-                  <svg
-                    className="flex-shrink-0 h-6 w-6 mr-3"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      className={`fill-current text-gray-600 ${
-                        page === "settings" && "text-indigo-500"
-                      }`}
-                      d="M19.714 14.7l-7.007 7.007-1.414-1.414 7.007-7.007c-.195-.4-.298-.84-.3-1.286a3 3 0 113 3 2.969 2.969 0 01-1.286-.3z"
-                    />
-                    <path
-                      className={`fill-current text-gray-400 ${
-                        page === "settings" && "text-indigo-300"
-                      }`}
-                      d="M10.714 18.3c.4-.195.84-.298 1.286-.3a3 3 0 11-3 3c.002-.446.105-.885.3-1.286l-6.007-6.007 1.414-1.414 6.007 6.007z"
-                    />
-                    <path
-                      className={`fill-current text-gray-600 ${
-                        page === "settings" && "text-indigo-500"
-                      }`}
-                      d="M5.7 10.714c.195.4.298.84.3 1.286a3 3 0 11-3-3c.446.002.885.105 1.286.3l7.007-7.007 1.414 1.414L5.7 10.714z"
-                    />
-                    <path
-                      className={`fill-current text-gray-400 ${
-                        page === "settings" && "text-indigo-300"
-                      }`}
-                      d="M19.707 9.292a3.012 3.012 0 00-1.415 1.415L13.286 5.7c-.4.195-.84.298-1.286.3a3 3 0 113-3 2.969 2.969 0 01-.3 1.286l5.007 5.006z"
-                    />
-                  </svg>
-                  <span className="text-sm font-medium">Settings</span>
-                </div>
-              </NavLink>
-            </li> */}
+          </ul>
+          <h3 className="text-xs uppercase text-gray-500 font-semibold pl-3">
+            Δημιουργία
+          </h3>
+          <ul className="mt-3">
+            <CreateProduct
+              key={"crtprd"}
+              page={page}
+              onTabChange={(pathname) => tabChange(pathname)}
+            />
+            <CreateCategory
+              key={"crtctg"}
+              page={page}
+              onTabChange={(pathname) => tabChange(pathname)}
+            />
+            <CreateIngredient
+              key={"crtingr"}
+              page={page}
+              onTabChange={(pathname) => tabChange(pathname)}
+            />
+            <CreateChoice
+              key={"crtchc"}
+              page={page}
+              onTabChange={(pathname) => tabChange(pathname)}
+            />
           </ul>
         </div>
       </div>
@@ -674,3 +293,99 @@ const Settings = ({ page, onTabChange }) => {
 };
 
 export default Sidebar;
+
+const CreateProduct = ({ page, onTabChange }) => {
+  return (
+    <li
+      key={7}
+      className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
+        page === "/create/product" && "bg-gray-900"
+      }`}
+    >
+      <NavLink
+        // exact
+        to="/create/product"
+        onClick={() => onTabChange("create/product")}
+        className={`block text-gray-200 hover:text-white transition duration-150 ${
+          page === "/create/product" && "hover:text-gray-200"
+        }`}
+      >
+        <div className="flex flex-grow">
+          <span className="text-sm font-medium"> Προϊόν</span>
+        </div>
+      </NavLink>
+    </li>
+  );
+};
+
+const CreateCategory = ({ page, onTabChange }) => {
+  return (
+    <li
+      key={8}
+      className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
+        page === "/create/category" && "bg-gray-900"
+      }`}
+    >
+      <NavLink
+        // exact
+        to="/create/category"
+        onClick={() => onTabChange("create/category")}
+        className={`block text-gray-200 hover:text-white transition duration-150 ${
+          page === "/create/category" && "hover:text-gray-200"
+        }`}
+      >
+        <div className="flex flex-grow">
+          <span className="text-sm font-medium"> Κατηγορία</span>
+        </div>
+      </NavLink>
+    </li>
+  );
+};
+
+const CreateIngredient = ({ page, onTabChange }) => {
+  return (
+    <li
+      key={9}
+      className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
+        page === "/create/ingredient" && "bg-gray-900"
+      }`}
+    >
+      <NavLink
+        // exact
+        to="/create/ingredient"
+        onClick={() => onTabChange("create/ingredient")}
+        className={`block text-gray-200 hover:text-white transition duration-150 ${
+          page === "/create/ingredient" && "hover:text-gray-200"
+        }`}
+      >
+        <div className="flex flex-grow">
+          <span className="text-sm font-medium"> Υλικό</span>
+        </div>
+      </NavLink>
+    </li>
+  );
+};
+
+const CreateChoice = ({ page, onTabChange }) => {
+  return (
+    <li
+      key={10}
+      className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
+        page === "/create/choice" && "bg-gray-900"
+      }`}
+    >
+      <NavLink
+        // exact
+        to="/create/choice"
+        onClick={() => onTabChange("create/choice")}
+        className={`block text-gray-200 hover:text-white transition duration-150 ${
+          page === "/create/choice" && "hover:text-gray-200"
+        }`}
+      >
+        <div className="flex flex-grow">
+          <span className="text-sm font-medium"> Επιλογή</span>
+        </div>
+      </NavLink>
+    </li>
+  );
+};
