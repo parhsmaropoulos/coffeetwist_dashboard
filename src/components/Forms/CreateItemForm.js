@@ -10,6 +10,7 @@ class CreateForm extends Component {
       open: false,
       options: [],
       loading: false,
+      item: {},
     };
     this.onCreate = this.onCreate.bind(this);
     this.setOpen = this.setOpen.bind(this);
@@ -101,7 +102,7 @@ class CreateForm extends Component {
         ) : page === "choice" ? (
           <ChoiceForm
             isUpdate={false}
-            item={null}
+            item={this.state.item}
             onCreate={(item) => this.onCreate(item, "choice")}
             onDelete={(idx) => this.onDeleteOption(idx)}
             onUpdate={(item) => this.onCreate(item)}
@@ -208,6 +209,7 @@ const ItemForm = ({
             className="appearance-none block w-full bg-gray-200 text-gray-700  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
             id="grid-first-name"
             name="name"
+            required
             type="text"
             onChange={onchange}
           />
@@ -240,6 +242,7 @@ const ItemForm = ({
             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="grid-password"
             name="price"
+            required
             onChange={onchange}
             type="number"
             step="0.01"
@@ -466,6 +469,7 @@ const CategoryForm = ({ isUpdate, item, onCreate, onUpdate }) => {
             className="appearance-none block w-full bg-gray-200 text-gray-700  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
             id="grid-first-name"
             name="name"
+            required
             type="text"
             onChange={onchange}
           />
@@ -573,6 +577,7 @@ const ChoiceForm = ({
             className="appearance-none block w-full bg-gray-200 text-gray-700  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
             id="grid-first-name"
             name="name"
+            required
             type="text"
             onChange={onchange}
           />
@@ -632,7 +637,7 @@ const ChoiceForm = ({
       <OptionModal
         open={open}
         setOpen={setOpen}
-        onAdd={(value, price) => onAdd(value, price)}
+        onAdd={(value, price) => onAdd(value, price, item)}
       />
     </form>
   );
@@ -658,6 +663,7 @@ const IngredientForm = ({ isUpdate, item, onCreate, onUpdate, categories }) => {
   onsubmit = (e) => {
     e.preventDefault();
     ingredient.price = parseFloat(ingredient.price).toFixed(2);
+    // console.log("here");
     isUpdate ? onUpdate(ingredient) : onCreate(ingredient);
   };
   return (
@@ -676,6 +682,7 @@ const IngredientForm = ({ isUpdate, item, onCreate, onUpdate, categories }) => {
             id="grid-first-name"
             name="name"
             type="text"
+            required
             onChange={onchange}
           />
         </div>
@@ -709,6 +716,7 @@ const IngredientForm = ({ isUpdate, item, onCreate, onUpdate, categories }) => {
             name="price"
             onChange={onchange}
             type="number"
+            required
             step="0.01"
           />
         </div>

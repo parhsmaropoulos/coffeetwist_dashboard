@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-
 function Sidebar({ sidebarOpen, setSidebarOpen, onTabChange }) {
   const location = useLocation();
   const { pathname } = location;
@@ -291,7 +290,6 @@ const Settings = ({ page, onTabChange }) => {
     </li>
   );
 };
-
 export default Sidebar;
 
 const CreateProduct = ({ page, onTabChange }) => {

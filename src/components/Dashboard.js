@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { accept_sse, get_request, put_request } from "../actions/lib";
+import withAuthorization from "./firebase/withAuthorization";
 import CreateForm from "./Forms/CreateItemForm";
 import Header from "./Header";
 import OptionBar from "./OptionBar";
@@ -286,4 +287,5 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+const condition = (authUser) => !!authUser;
+export default withAuthorization(condition)(Dashboard);

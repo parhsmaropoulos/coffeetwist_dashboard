@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { Component } from "react";
-
 class OrdersTable extends Component {
   constructor(props) {
     super(props);
@@ -75,7 +74,6 @@ class OrdersTable extends Component {
     );
   }
 }
-
 export default OrdersTable;
 
 const OrderTable = ({

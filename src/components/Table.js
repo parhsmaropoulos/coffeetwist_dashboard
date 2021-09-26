@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { put_request } from "../actions/lib";
 import "../css/slider.css";
+import withAuthorization from "./firebase/withAuthorization";
 
 class Table extends Component {
   constructor(props) {
@@ -108,7 +109,9 @@ class Table extends Component {
   }
 }
 
-export default Table;
+const condition = (authUser) => !!authUser;
+
+export default withAuthorization(condition)(Table);
 
 const ItemTable = ({ products, changeAvailability, selectedCategory }) => {
   return (

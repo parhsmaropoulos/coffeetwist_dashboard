@@ -1,26 +1,18 @@
 import "./App.css";
-import { Switch, Route, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { Switch, Route } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import HomePage from "./components/HomePage";
+import { BrowserRouter as Router } from "react-router-dom";
+import withAuthentication from "./components/firebase/withAuthentication";
 
-function App() {
-  const location = useLocation();
+const App = () => (
+  <Router>
+    <Switch>
+      <Route exact path="/login" component={HomePage} />
+      <Route exact path="/create/:string" component={Dashboard} />
+      <Route exact path="/*" component={Dashboard} />
+    </Switch>
+  </Router>
+);
 
-  useEffect(() => {
-    document.querySelector("html").style.scrollBehavior = "auto";
-    window.scroll({ top: 0 });
-    document.querySelector("html").style.scrollBehavior = "";
-  }, [location.pathname]); // triggered on route change
-  return (
-    <>
-      <Switch>
-        <Route exact path="/home" component={HomePage} />
-        <Route exact path="/create/:string" component={Dashboard} />
-        <Route exact path="/*" component={Dashboard} />
-      </Switch>
-    </>
-  );
-}
-
-export default App;
+export default withAuthentication(App);

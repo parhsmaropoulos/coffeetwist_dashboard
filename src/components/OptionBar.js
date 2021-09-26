@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
 class OptionBar extends Component {
   constructor(props) {
     super(props);
@@ -117,4 +116,5 @@ const ProductsSidebar = ({
     </ul>
   );
 };
+
 export default OptionBar;

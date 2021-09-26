@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
-
 class OrdersSideBar extends Component {
   constructor(props) {
     super(props);
@@ -63,4 +62,5 @@ const Sidebar = ({ page, options, names }) => {
     </ul>
   );
 };
+
 export default OrdersSideBar;

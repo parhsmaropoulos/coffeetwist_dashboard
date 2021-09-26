@@ -3,12 +3,12 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter as Router } from "react-router-dom";
+import { Firebase, FirebaseContext } from "./components/firebase/base";
 
 ReactDOM.render(
-  <Router>
+  <FirebaseContext.Provider value={new Firebase()}>
     <App />
-  </Router>,
+  </FirebaseContext.Provider>,
   document.getElementById("root")
 );
 

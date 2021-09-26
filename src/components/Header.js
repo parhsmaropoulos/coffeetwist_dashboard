@@ -1,4 +1,5 @@
 import React from "react";
+
 function Header({ sidebarOpen, setSidebarOpen }) {
   return (
     <header className="sticky top-0 bg-white border-b border-gray-200 z-30">
