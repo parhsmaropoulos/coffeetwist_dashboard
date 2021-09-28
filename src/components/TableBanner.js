@@ -1,5 +1,4 @@
 import React from "react";
-import withAuthorization from "./firebase/withAuthorization";
 
 function TableBanner() {
   return (

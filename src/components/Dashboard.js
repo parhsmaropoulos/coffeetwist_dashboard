@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { accept_sse, get_request, put_request } from "../actions/lib";
+import {
+  accept_sse,
+  auth_get_request,
+  get_request,
+  put_request,
+} from "../actions/lib";
 import withAuthorization from "./firebase/withAuthorization";
 import CreateForm from "./Forms/CreateItemForm";
 import Header from "./Header";
@@ -121,7 +126,7 @@ class Dashboard extends Component {
   }
 
   async get_products() {
-    const products = await get_request("products/all");
+    const products = await auth_get_request("products/all");
     this.setState({
       products: products,
     });

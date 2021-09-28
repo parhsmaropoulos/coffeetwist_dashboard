@@ -18,6 +18,7 @@ class Table extends Component {
       products: this.props.products,
       ingredients: this.props.ingredients,
     });
+    // console.log(this.props.products);
   }
 
   changeIngrdientAvailability = (id) => {

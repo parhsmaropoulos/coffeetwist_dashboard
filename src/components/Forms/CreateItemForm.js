@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { post_request, put_request } from "../../actions/lib";
+import { post_request } from "../../actions/lib";
 import OptionModal from "./OptionModal";
 
 class CreateForm extends Component {
