@@ -4,38 +4,20 @@ import { config } from "../utils/headers";
 import { current_url } from "../utils/util";
 // import { CREATE_CATEGORY, CREATE_ITEM, SNACKBAR_ERROR } from "./actions";
 
-// export const auth_get_request = (url, dispatch_type) => async (dispatch) => {
-//   try {
-//     const token = await app
-//       .auth()
-//       .currentUser.getIdToken(/* forceRefresh */ true);
-//     let auth_config = config;
-//     auth_config.headers.Authorization = `Bearer ${token}`;
-//     try {
-//       const res = await axios.get(current_url + url, auth_config);
-//       //   dispatch({
-//       //     type: dispatch_type,
-//       //     data: res.data.data,
-//       //   });
-//       return res.data.data;
-//     } catch (e) {
-//       //   console.log(e);
-//       alert("Error with get request");
-//       //   dispatch({
-//       //     type: SNACKBAR_ERROR,
-//       //     message: "Error with get request",
-//       //   });
-//     }
-//   } catch (e) {
-//     //handle e
-//     alert("Error with token");
-
-//     // dispatch({
-//     //   type: SNACKBAR_ERROR,
-//     //   message: "Error with token",
-//     // });
-//   }
-// };
+export const auth_get_request = async (url) => {
+  let auth_config = config;
+  auth_config.headers.Authorization = `Bearer ${localStorage.getItem(
+    "firToken"
+  )}`;
+  try {
+    const res = await axios.get(current_url + url, auth_config);
+    console.log(res);
+    return res.data.data;
+  } catch (e) {
+    //handle e
+    alert("Error get request");
+  }
+};
 
 export async function get_request(url) {
   try {
