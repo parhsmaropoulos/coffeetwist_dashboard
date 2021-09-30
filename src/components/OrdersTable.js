@@ -298,10 +298,14 @@ const ActionButtons = ({
     buttonC.text = null;
   }
 
+  function PrintReciept() {
+    console.log(order.receipt);
+  }
   return (
     <div className="grid grid-cols-3 gap-4">
       <button
         className={`${buttonA.color} col-span-3  text-white font-bold py-1 px-1 rounded-full`}
+        onClick={PrintReciept}
       >
         {buttonA.text}
       </button>

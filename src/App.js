@@ -8,7 +8,7 @@ import withAuthentication from "./components/firebase/withAuthentication";
 const App = () => (
   <Router>
     <Switch>
-      <Route exact path="/login" component={HomePage} />
+      <Route exact path="/login" component={HomePage}></Route>
       <Route exact path="/create/:string" component={Dashboard} />
       <Route exact path="/*" component={Dashboard} />
     </Switch>

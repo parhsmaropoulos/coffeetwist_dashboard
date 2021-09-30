@@ -59,7 +59,6 @@ const IngredientsSidebar = ({
             return (
               <Link
                 // exact
-
                 to={`/${page}/${o}`}
                 onClick={() => onCategoryChange(o)}
                 className={`block w-full  text-black-200 hover:text-gray-400 transition duration-150 inline-block`}
