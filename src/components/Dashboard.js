@@ -36,7 +36,9 @@ class Dashboard extends Component {
 
   async recieveOrder(order) {
     let data = JSON.parse(order.data);
-    this.setState({ incoming: this.state.incoming.push(data.order) });
+    let incs = this.state.incoming;
+    incs.push(data.order);
+    this.setState({ incoming: incs });
   }
 
   async acceptOrder(order, time) {
@@ -95,8 +97,6 @@ class Dashboard extends Component {
       `admin/orders/${order.ID}/complete_order`,
       null
     );
-    console.log(newOrder);
-
     let getting_ready = this.state.getting_ready;
     let completed = this.state.completed;
     const index = getting_ready.findIndex((p) => p.ID === newOrder.ID);
@@ -133,14 +133,15 @@ class Dashboard extends Component {
   }
 
   async get_choices() {
-    const choices = await get_request("product_choices/all");
+    const choices = await auth_get_request("product_choices/all");
     this.setState({
       choices: choices,
     });
   }
 
   async get_orders() {
-    const orders = await get_request("admin/today");
+    const orders = await auth_get_request("admin/today");
+    console.log(orders);
     this.setState({
       incoming: orders.incoming,
       getting_ready: orders.getting_ready,
@@ -149,14 +150,14 @@ class Dashboard extends Component {
   }
 
   async get_categories() {
-    const categories = await get_request("product_category/all");
+    const categories = await auth_get_request("product_category/all");
     this.setState({
       categories: categories,
     });
   }
 
   async get_ingredients() {
-    const res = await get_request("ingredients/all");
+    const res = await auth_get_request("ingredients/all");
     this.setState({
       ingredients: res.ingredients,
       ingredientCategories: res.categories,

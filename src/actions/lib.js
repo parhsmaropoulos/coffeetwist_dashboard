@@ -11,7 +11,6 @@ export const auth_get_request = async (url) => {
   )}`;
   try {
     const res = await axios.get(current_url + url, auth_config);
-    console.log(res);
     return res.data.data;
   } catch (e) {
     //handle e
