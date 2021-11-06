@@ -1,10 +1,5 @@
 import React, { Component } from "react";
-import {
-  accept_sse,
-  auth_get_request,
-  get_request,
-  put_request,
-} from "../actions/lib";
+import { accept_sse, auth_get_request, put_request } from "../actions/lib";
 import withAuthorization from "./firebase/withAuthorization";
 import CreateForm from "./Forms/CreateItemForm";
 import Header from "./Header";
