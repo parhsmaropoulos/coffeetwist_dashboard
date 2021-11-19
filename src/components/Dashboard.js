@@ -136,7 +136,6 @@ class Dashboard extends Component {
 
   async get_orders() {
     const orders = await auth_get_request("admin/today");
-    console.log(orders);
     this.setState({
       incoming: orders.incoming,
       getting_ready: orders.getting_ready,
@@ -165,16 +164,14 @@ class Dashboard extends Component {
     });
   }
 
-  onCategoryChange(name) {
-    if (this.state.page === "ingredients") {
-      this.setState({
-        selectedCategory: name,
-      });
-    } else {
-      // console.log(name);
-      this.setState({
-        selectedCategory: name,
-      });
+  onCategoryChange(selected, category) {
+    console.log(selected, category);
+    if (category === "products") {
+      sessionStorage.setItem("productTab", selected);
+      this.get_products();
+      this.get_categories();
+    } else if (category === "ingredients") {
+      sessionStorage.setItem("ingredientTab", selected);
     }
   }
 
@@ -232,7 +229,9 @@ class Dashboard extends Component {
                       page={this.state.page}
                       categories={this.state.categories}
                       selectedCategory={this.state.selectedCategory}
-                      onChangeCategory={(c) => this.onCategoryChange(c)}
+                      onChangeCategory={(c, tag) =>
+                        this.onCategoryChange(c, tag)
+                      }
                       ingredientCategories={this.state.ingredientCategories}
                     />
                   </div>
