@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { accept_sse, auth_get_request, put_request } from "../actions/lib";
+import { current_url } from "../utils/util";
 import withAuthorization from "./firebase/withAuthorization";
 import CreateForm from "./Forms/CreateItemForm";
 import Header from "./Header";
@@ -12,9 +13,7 @@ import TableBanner from "./TableBanner";
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.eventSource = new EventSource(
-      "http://localhost:8080/sse/events/admin"
-    );
+    this.eventSource = new EventSource(current_url + "/sse/events/admin");
     this.state = {
       page: "",
       products: [],
