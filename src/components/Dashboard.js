@@ -13,7 +13,7 @@ import TableBanner from "./TableBanner";
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.eventSource = new EventSource(current_url + "/sse/events/admin");
+    this.eventSource = new EventSource(current_url + "sse/events/admin");
     this.state = {
       page: "",
       products: [],
