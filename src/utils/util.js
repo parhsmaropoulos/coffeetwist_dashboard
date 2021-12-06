@@ -3,8 +3,7 @@ export const options = {
   ShopSubTitle: "Ελληνικό, Αθήνα",
 };
 
-export const current_url =
-  "https://ct-lb-1094286185.eu-west-1.elb.amazonaws.com/";
+export const current_url = "https://api.ct-dashboard.gr/";
 
 export const run_on =
   process.env.ENV === "production" ? "" : "http://localhost:3000";
