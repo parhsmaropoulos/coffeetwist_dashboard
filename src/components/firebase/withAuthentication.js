@@ -2,6 +2,7 @@ import React from "react";
 
 import { AuthUserContext } from "./base";
 import { withFirebase } from "./base";
+import img from "../../img/coffee-bin-removebg-preview.png";
 
 const withAuthentication = (Component) => {
   class WithAuthentication extends React.Component {
@@ -44,7 +45,16 @@ const withAuthentication = (Component) => {
           {hasLoaded ? (
             <Component {...this.props} />
           ) : (
-            <h1 align="center">Refreshing Token...</h1>
+            <div className="flex h-screen">
+              <div className="m-auto">
+                <h3 className="text-center">Loading...</h3>
+                <img
+                  className="animate-bounce  w-32 h-32"
+                  alt="coffe-bin"
+                  src={img}
+                />
+              </div>
+            </div>
           )}
         </AuthUserContext.Provider>
       );

@@ -24,7 +24,8 @@ class CreateForm extends Component {
     });
   }
 
-  onCreate = async (item, type) => {
+  onCreate = async (e, item, type) => {
+    e.preventDefault();
     this.setState({ loading: true });
     if (type === "category") {
       await post_request("product_category/create_product_category", item);
@@ -71,7 +72,7 @@ class CreateForm extends Component {
           <ItemForm
             isUpdate={false}
             item={null}
-            onCreate={(item) => this.onCreate(item, "product")}
+            onCreate={(e, item) => this.onCreate(e, item, "product")}
             onUpdate={(item) => this.onCreate(item)}
             categories={this.props.categories}
             choices={this.props.choices}
@@ -82,14 +83,14 @@ class CreateForm extends Component {
           <CategoryForm
             isUpdate={false}
             item={null}
-            onCreate={(item) => this.onCreate(item, "category")}
+            onCreate={(e, item) => this.onCreate(e, item, "category")}
             onUpdate={(item) => this.onCreate(item)}
           />
         ) : page === "ingredient" ? (
           <IngredientForm
             isUpdate={false}
             item={null}
-            onCreate={(item) => this.onCreate(item, "ingredient")}
+            onCreate={(e, item) => this.onCreate(e, item, "ingredient")}
             onUpdate={(item) => this.onCreate(item)}
             categories={this.props.ingredientCategories}
           />
@@ -97,7 +98,7 @@ class CreateForm extends Component {
           <ChoiceForm
             isUpdate={false}
             item={this.state.item}
-            onCreate={(item) => this.onCreate(item, "choice")}
+            onCreate={(e, item) => this.onCreate(e, item, "choice")}
             onDelete={(idx) => this.onDeleteOption(idx)}
             onUpdate={(item) => this.onCreate(item)}
             open={this.state.open}
@@ -186,7 +187,7 @@ const ItemForm = ({
       "default_ingredients",
       JSON.stringify(product.default_ingredients)
     );
-    isUpdate ? onUpdate(body) : onCreate(body);
+    isUpdate ? onUpdate(body) : onCreate(e, body);
   };
   return (
     <form className="w-full max-w-lg items-center" onSubmit={onsubmit}>
@@ -441,7 +442,7 @@ const CategoryForm = ({ isUpdate, item, onCreate, onUpdate }) => {
     body.append("file", category.image);
     body.append("name", category.name);
     body.append("description", category.description);
-    isUpdate ? onUpdate(body) : onCreate(body);
+    isUpdate ? onUpdate(body) : onCreate(e, body);
   };
   function onFileChange(e) {
     category.image = e.target.files[0];
@@ -555,7 +556,7 @@ const ChoiceForm = ({
   };
   onsubmit = (e) => {
     e.preventDefault();
-    isUpdate ? onUpdate(choice) : onCreate(choice);
+    isUpdate ? onUpdate(choice) : onCreate(e, choice);
   };
   return (
     <form className="w-full max-w-lg items-center" onSubmit={onsubmit}>
@@ -658,7 +659,7 @@ const IngredientForm = ({ isUpdate, item, onCreate, onUpdate, categories }) => {
     e.preventDefault();
     ingredient.price = parseFloat(ingredient.price).toFixed(2);
     // console.log("here");
-    isUpdate ? onUpdate(ingredient) : onCreate(ingredient);
+    isUpdate ? onUpdate(ingredient) : onCreate(e, ingredient);
   };
   return (
     <form className="w-full max-w-lg items-center" onSubmit={onsubmit}>

@@ -158,6 +158,32 @@ class Dashboard extends Component {
   }
 
   onTabChange(name) {
+    switch (name) {
+      case "incoming":
+      case "getting_ready":
+      case "completed":
+        this.get_orders();
+        break;
+      case "products":
+        this.get_products();
+        break;
+      case "ingredients":
+        this.get_ingredients();
+        break;
+      case "create/product":
+        this.get_choices();
+        this.get_ingredients();
+        this.get_categories();
+        break;
+      case "create/category":
+        break;
+      case "create/ingredient":
+        break;
+      case "create/choice":
+        break;
+      default:
+        break;
+    }
     this.setState({
       page: name,
     });
