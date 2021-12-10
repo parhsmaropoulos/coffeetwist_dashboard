@@ -190,7 +190,6 @@ class Dashboard extends Component {
   }
 
   onCategoryChange(selected, category) {
-    console.log(selected, category);
     if (category === "products") {
       sessionStorage.setItem("productTab", selected);
       this.get_products();
