@@ -30,9 +30,12 @@ class Dashboard extends Component {
 
   async recieveOrder(order) {
     let data = JSON.parse(order.data);
-    let incs = this.state.incoming;
-    incs.push(data.order);
+    let incs = this.state.incoming
+      ? this.state.incoming.push(data.order)
+      : [data.order];
+
     this.setState({ incoming: incs });
+    this.onTabChange("incoming");
   }
 
   async acceptOrder(order, time) {
@@ -49,8 +52,13 @@ class Dashboard extends Component {
         { delivery_time: data.time }
       );
       let incoming = this.state.incoming;
-      let getting_ready = this.state.getting_ready;
-      const index = incoming.findIndex((p) => p.ID === newOrder.ID);
+      let getting_ready = this.state.getting_ready
+        ? this.state.getting_ready
+        : [];
+      const index = incoming
+        ? incoming.findIndex((p) => p.ID === newOrder.ID)
+        : 0;
+
       getting_ready.unshift(incoming[index]);
       incoming.splice(index, 1);
       this.setState({
@@ -92,15 +100,11 @@ class Dashboard extends Component {
       null
     );
     let getting_ready = this.state.getting_ready;
-    let completed = this.state.completed;
+    let completed = this.state.completed ? this.state.completed : [];
     const index = getting_ready.findIndex((p) => p.ID === newOrder.ID);
-    if (index !== -1) {
-      if (completed === null) {
-        completed = [];
-      }
-      completed.unshift(getting_ready[index]);
-      getting_ready.splice(index, 1);
-    }
+
+    completed.unshift(getting_ready[index]);
+    getting_ready.splice(index, 1);
     this.setState({
       getting_ready: getting_ready,
       completed: completed,
