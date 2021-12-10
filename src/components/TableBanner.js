@@ -69,9 +69,8 @@ function TableBanner() {
       {/* Content */}
       <div className="relative">
         <h1 className="text-2xl md:text-3xl text-gray-800 font-bold mb-1">
-          Good afternoon, Acme Inc. 👋
+          Γειά σου φίλε μου. 👋
         </h1>
-        <p>Here is what’s happening with your projects today:</p>
       </div>
     </div>
   );

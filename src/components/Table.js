@@ -58,6 +58,8 @@ class Table extends Component {
 
   render() {
     const page = this.props.page;
+    const productCategoryId = sessionStorage.getItem("productTab");
+    const ingredientsCategoryId = sessionStorage.getItem("ingredientTab");
     return (
       <div className="col-span-full xl:col-span-8 bg-white shadow-lg rounded-sm border border-gray-200">
         <header className="px-5 py-4 border-b border-gray-100">
@@ -86,7 +88,7 @@ class Table extends Component {
                 {page === "products" ? (
                   <ItemTable
                     products={this.state.products}
-                    selectedCategory={this.props.selectedCategory}
+                    selectedCategory={+productCategoryId}
                     changeAvailability={(id) =>
                       this.changeProductAvailability(id)
                     }
@@ -94,7 +96,7 @@ class Table extends Component {
                 ) : (
                   <IngredientsTable
                     ingredients={this.state.ingredients}
-                    selectedCategory={this.props.selectedCategory}
+                    selectedCategory={+ingredientsCategoryId}
                     changeAvailability={(id) =>
                       this.changeIngrdientAvailability(id)
                     }
@@ -116,7 +118,7 @@ const ItemTable = ({ products, changeAvailability, selectedCategory }) => {
     <>
       {products
         ? products.map((i, idx) => {
-            if (i.category_id === selectedCategory.ID) {
+            if (i.category_id === selectedCategory) {
               return (
                 <tr key={idx}>
                   <td className="p-3">
