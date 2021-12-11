@@ -4,7 +4,6 @@ export const headers = {
 };
 export const config = {
   headers: {
-    "Content-Type": "application/json",
     Authorization: `Bearer  ${process.env.REACT_APP_TOKEN}`,
   },
 };

@@ -73,7 +73,7 @@ class CreateForm extends Component {
             isUpdate={false}
             item={null}
             onCreate={(e, item) => this.onCreate(e, item, "product")}
-            onUpdate={(item) => this.onCreate(item)}
+            onUpdate={(e, item) => this.onCreate(e, item)}
             categories={this.props.categories}
             choices={this.props.choices}
             ingredients={this.props.ingredients}
@@ -91,7 +91,7 @@ class CreateForm extends Component {
             isUpdate={false}
             item={null}
             onCreate={(e, item) => this.onCreate(e, item, "ingredient")}
-            onUpdate={(item) => this.onCreate(item)}
+            onUpdate={(e, item) => this.onCreate(e, item)}
             categories={this.props.ingredientCategories}
           />
         ) : page === "choice" ? (
@@ -100,7 +100,7 @@ class CreateForm extends Component {
             item={this.state.item}
             onCreate={(e, item) => this.onCreate(e, item, "choice")}
             onDelete={(idx) => this.onDeleteOption(idx)}
-            onUpdate={(item) => this.onCreate(item)}
+            onUpdate={(e, item) => this.onCreate(e, item)}
             open={this.state.open}
             setOpen={this.setOpen}
             onAdd={(value, price) => this.onAdd(value, price)}
@@ -187,7 +187,7 @@ const ItemForm = ({
       "default_ingredients",
       JSON.stringify(product.default_ingredients)
     );
-    isUpdate ? onUpdate(body) : onCreate(e, body);
+    isUpdate ? onUpdate(e, body) : onCreate(e, body);
   };
   return (
     <form className="w-full max-w-lg items-center" onSubmit={onsubmit}>
@@ -442,7 +442,7 @@ const CategoryForm = ({ isUpdate, item, onCreate, onUpdate }) => {
     body.append("file", category.image);
     body.append("name", category.name);
     body.append("description", category.description);
-    isUpdate ? onUpdate(body) : onCreate(e, body);
+    isUpdate ? onUpdate(e, body) : onCreate(e, body);
   };
   function onFileChange(e) {
     category.image = e.target.files[0];
@@ -450,7 +450,7 @@ const CategoryForm = ({ isUpdate, item, onCreate, onUpdate }) => {
     // console.log(document.getElementById("img-preview").src);
   }
   return (
-    <form className="w-full max-w-lg items-center" onSubmit={onsubmit}>
+    <form className="w-full max-w-lg items-center">
       {" "}
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full px-3 ">
@@ -520,7 +520,7 @@ const CategoryForm = ({ isUpdate, item, onCreate, onUpdate }) => {
           </div>
         </div>
       </div>
-      <SaveButton />
+      <SaveButton onSubmit={(e) => onsubmit(e)} />
     </form>
   );
 };
@@ -556,7 +556,7 @@ const ChoiceForm = ({
   };
   onsubmit = (e) => {
     e.preventDefault();
-    isUpdate ? onUpdate(choice) : onCreate(e, choice);
+    isUpdate ? onUpdate(e, choice) : onCreate(e, choice);
   };
   return (
     <form className="w-full max-w-lg items-center" onSubmit={onsubmit}>
@@ -659,8 +659,9 @@ const IngredientForm = ({ isUpdate, item, onCreate, onUpdate, categories }) => {
     e.preventDefault();
     ingredient.price = parseFloat(ingredient.price).toFixed(2);
     // console.log("here");
-    isUpdate ? onUpdate(ingredient) : onCreate(e, ingredient);
+    isUpdate ? onUpdate(e, ingredient) : onCreate(e, ingredient);
   };
+
   return (
     <form className="w-full max-w-lg items-center" onSubmit={onsubmit}>
       {" "}
@@ -731,12 +732,14 @@ const IngredientForm = ({ isUpdate, item, onCreate, onUpdate, categories }) => {
               name="category"
               onChange={onselect}
             >
-              {categories ? (
+              {categories.length > 0 ? (
                 categories.map((c, idx) => <option key={idx}>{c}</option>)
               ) : (
                 <option>Δεν υπάρχει ακόμα </option>
               )}
-              <option value="new">Δημιουργία νέας </option>
+              <option value="new" key={0}>
+                Δημιουργία νέας
+              </option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
               <svg
@@ -771,11 +774,12 @@ const IngredientForm = ({ isUpdate, item, onCreate, onUpdate, categories }) => {
   );
 };
 
-const SaveButton = () => {
+const SaveButton = ({ onSubmit }) => {
   return (
     <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
       <button
-        type="submit"
+        type="button"
+        onClick={(e) => onSubmit(e)}
         className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
         Αποθήκευση
