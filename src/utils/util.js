@@ -4,7 +4,7 @@ export const options = {
 };
 
 export const current_url =
-  process.env.ENV === "production"
+  process.env.REACT_APP_ENV === "production"
     ? "https://api.ct-dashboard.gr/"
     : "http://localhost:8080/";
 
