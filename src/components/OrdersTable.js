@@ -105,16 +105,16 @@ class OrdersTable extends Component {
     });
   }
 
-  componentDidUpdate() {
-    if (this.state.orders_loaded === false) {
-      this.setState({
-        incoming: this.props.incoming,
-        accepted: this.props.accepted,
-        completed: this.props.completed,
-        orders_loaded: true,
-      });
-    }
-  }
+  // componentDidUpdate() {
+  //   if (this.state.orders_loaded === false) {
+  //     this.setState({
+  //       incoming: this.props.incoming,
+  //       accepted: this.props.accepted,
+  //       completed: this.props.completed,
+  //       orders_loaded: true,
+  //     });
+  //   }
+  // }
 
   printOrder = (order) => {
     let content = document.getElementById(`order-id-${order.ID}`);
@@ -139,7 +139,7 @@ class OrdersTable extends Component {
   }
 
   render() {
-    const page = this.props.orders;
+    const page = this.props.page;
     let orders;
     if (page === "incoming") {
       orders = this.state.incoming;
