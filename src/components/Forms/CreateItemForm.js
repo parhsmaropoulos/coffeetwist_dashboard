@@ -422,7 +422,7 @@ const ItemForm = ({
           </div>
         </div>
       </div>
-      <SaveButton />
+      <SaveButton onSubmit={(e) => onsubmit(e)} />
     </form>
   );
 };
@@ -628,7 +628,7 @@ const ChoiceForm = ({
         <></>
       )}
       <AddChoiceButton setOpen={setOpen} />
-      <SaveButton />
+      <SaveButton onSubmit={(e) => onsubmit(e)} />
       <OptionModal
         open={open}
         setOpen={setOpen}
@@ -769,7 +769,7 @@ const IngredientForm = ({ isUpdate, item, onCreate, onUpdate, categories }) => {
           />
         </div>
       </div>
-      <SaveButton />
+      <SaveButton onSubmit={(e) => onsubmit(e)} />
     </form>
   );
 };
