@@ -1,6 +1,11 @@
+/* eslint-disable react/style-prop-object */
+/* eslint-disable jsx-a11y/iframe-has-title */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { Component } from "react";
+import { accept_sse, put_request } from "../actions/lib";
+import Sound from "react-sound";
+import song from "../music/indaclub.mp3";
 class OrdersTable extends Component {
   constructor(props) {
     super(props);
@@ -10,20 +15,131 @@ class OrdersTable extends Component {
       incoming: [],
       completed: [],
       selectedTime: 10,
+      orders_loaded: false,
+      isPlaying: false,
     };
+    this.startMusic = this.startMusic.bind(this);
+    this.stopMusic = this.stopMusic.bind(this);
   }
 
   componentDidMount() {
-    // console.log(this.props);
+    this._isMounted = true;
     this.setState({
       incoming: this.props.incoming,
       accepted: this.props.getting_ready,
       completed: this.props.completed,
     });
   }
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  async acceptOrder(order, time) {
+    let data = {
+      id: String(order.ID),
+      accepted: true,
+      time: time,
+      from: order.from_id,
+    };
+    const res = await accept_sse(`sse/acceptorder`, data);
+    if (res === true) {
+      const newOrder = await put_request(
+        `admin/orders/${data.id}/accept_order`,
+        { delivery_time: data.time }
+      );
+      let incoming = this.state.incoming;
+      let accepted = this.state.accepted ? this.state.accepted : [];
+      const index = incoming
+        ? incoming.findIndex((p) => p.ID === newOrder.ID)
+        : 0;
+
+      accepted.unshift(incoming[index]);
+      incoming.splice(index, 1);
+      this.setState({
+        incoming: incoming,
+        accepted: accepted,
+      });
+    }
+  }
+
+  async rejectOrder(order) {
+    let data = {
+      id: String(order.ID),
+      accepted: false,
+      time: 0,
+      from: order.from_id,
+    };
+    const res = await accept_sse(`sse/acceptorder`, data);
+    if (res === true) {
+      const newOrder = await put_request(
+        `admin/orders/${data.id}/cancel_order`,
+        null
+      );
+      let incoming = this.state.incoming;
+      // TODO create cancel order list
+      // let getting_ready = this.state.getting_ready;
+      const index = incoming.findIndex((p) => p.ID === newOrder.ID);
+      // getting_ready.unshift(incoming[index]);
+      incoming.splice(index, 1);
+      this.setState({
+        incoming: incoming,
+        // getting_ready: getting_ready,
+      });
+    }
+  }
+
+  async completeOrder(order) {
+    const newOrder = await put_request(
+      `admin/orders/${order.ID}/complete_order`,
+      null
+    );
+    let accepted = this.state.accepted;
+    let completed = this.state.completed ? this.state.completed : [];
+    const index = accepted.findIndex((p) => p.ID === newOrder.ID);
+
+    completed.unshift(accepted[index]);
+    accepted.splice(index, 1);
+    this.setState({
+      accepted: accepted,
+      completed: completed,
+    });
+  }
+
+  componentDidUpdate() {
+    if (this.state.orders_loaded === false) {
+      this.setState({
+        incoming: this.props.incoming,
+        accepted: this.props.accepted,
+        completed: this.props.completed,
+        orders_loaded: true,
+      });
+    }
+  }
+
+  printOrder = (order) => {
+    let content = document.getElementById(`order-id-${order.ID}`);
+    content.classList.add("printable");
+    // let pri = document.getElementById("ifmcontentstoprint").contentWindow;
+    // pri.document.open();
+    // pri.document.write(content.innerHTML);
+    // pri.document.close();
+    // pri.focus();
+    // pri.print();
+  };
+
+  startMusic() {
+    this.setState({
+      isPlaying: true,
+    });
+  }
+  stopMusic() {
+    this.setState({
+      isPlaying: false,
+    });
+  }
 
   render() {
-    const page = this.props.page;
+    const page = this.props.orders;
     let orders;
     if (page === "incoming") {
       orders = this.state.incoming;
@@ -34,7 +150,19 @@ class OrdersTable extends Component {
     }
     return (
       <div className="col-span-full xl:col-span-9 bg-white shadow-lg rounded-sm border border-gray-200">
-        <header className="px-5 py-4 border-b border-gray-100">
+        <Sound
+          url={song}
+          playStatus={
+            this.state.isPlaying ? Sound.status.PLAYING : Sound.status.STOPPED
+          }
+          playFromPosition={300}
+          // onLoading={handleSongLoading}
+          // onPlaying={handleSongPlaying}
+          // onFinishedPlaying={handleSongFinishedPlaying}
+        />
+        <button onClick={this.startMusic}>Start</button>
+        <button onClick={this.stopMusic}>Stop</button>
+        <header className="px-5 py-4 border-b border-gray-100 ">
           <h2 className="font-semibold text-gray-800">Παραγγελίες</h2>
         </header>
         <div className="p-3">
@@ -42,7 +170,7 @@ class OrdersTable extends Component {
           <div className="overflow-x-auto ">
             <table className="table-auto  w-full ">
               {/**table header */}
-              <thead className="text-xs uppercase text-gray-400 bg-gray-50 rounded-sm">
+              <thead className="text-xs uppercase text-gray-400 bg-gray-50 rounded-sm ">
                 <tr>
                   <th className="p-8">
                     <div className="font-semibold text-left">Λεπτομέριες</div>
@@ -61,10 +189,11 @@ class OrdersTable extends Component {
                     this.setState({ selectedTime: parseInt(t) })
                   }
                   acceptOrder={(order) =>
-                    this.props.acceptOrder(order, this.state.selectedTime)
+                    this.acceptOrder(order, this.state.selectedTime)
                   }
-                  completeOrder={(order) => this.props.completeOrder(order)}
-                  rejectOrder={(order) => this.props.rejectOrder(order)}
+                  completeOrder={(order) => this.completeOrder(order)}
+                  rejectOrder={(order) => this.rejectOrder(order)}
+                  printOrder={(order) => this.printOrder(order)}
                 />
               </tbody>
             </table>
@@ -83,13 +212,14 @@ const OrderTable = ({
   acceptOrder,
   completeOrder,
   rejectOrder,
+  printOrder,
 }) => {
   return (
     <>
       {orders
         ? orders.map((i, idx) => {
             return (
-              <tr key={idx}>
+              <tr key={idx} id={`order-id-${i.ID}`}>
                 <td className="w-3/4 pb-20">
                   <div className="border-t border-gray-200">
                     <dl>
@@ -242,7 +372,7 @@ const OrderTable = ({
                     </dl>
                   </div>
                 </td>
-                <td className="flex">
+                <td className="flex unprintable">
                   <ActionButtons
                     order={i}
                     state={page}
@@ -250,6 +380,7 @@ const OrderTable = ({
                     acceptOrder={(order) => acceptOrder(order)}
                     completeOrder={(order) => completeOrder(order)}
                     rejectOrder={(order) => rejectOrder(order)}
+                    printOrder={() => printOrder(i)}
                   />
                 </td>
               </tr>
@@ -269,6 +400,7 @@ const ActionButtons = ({
   acceptOrder,
   completeOrder,
   rejectOrder,
+  printOrder,
 }) => {
   let buttonA = {};
   let buttonB = {};
@@ -276,6 +408,7 @@ const ActionButtons = ({
   let showTime = false;
   if (state === "incoming") {
     buttonA.text = "Print it";
+    buttonA.func = printOrder;
     buttonA.color = "bg-gray-400";
     buttonB.text = "Accept";
     buttonB.color = "bg-green-400";
@@ -287,6 +420,7 @@ const ActionButtons = ({
   } else if (state === "getting_ready") {
     buttonA.text = "Print it";
     buttonA.color = "bg-gray-400";
+    buttonA.func = printOrder;
     buttonB.text = "Complete";
     buttonB.color = "bg-green-400 ";
     buttonB.func = completeOrder;
@@ -294,18 +428,15 @@ const ActionButtons = ({
   } else if (state === "completed") {
     buttonA.text = "Print it";
     buttonA.color = "bg-gray-400";
+    buttonA.func = printOrder;
     buttonB.text = null;
     buttonC.text = null;
-  }
-
-  function PrintReciept() {
-    console.log(order.receipt);
   }
   return (
     <div className="grid grid-cols-3 gap-4">
       <button
         className={`${buttonA.color} col-span-3  text-white font-bold py-1 px-1 rounded-full`}
-        onClick={PrintReciept}
+        onClick={printOrder}
       >
         {buttonA.text}
       </button>
