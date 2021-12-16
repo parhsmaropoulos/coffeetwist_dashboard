@@ -27,15 +27,16 @@ class CreateForm extends Component {
   onCreate = async (e, item, type) => {
     e.preventDefault();
     this.setState({ loading: true });
-    if (type === "category") {
-      await post_request("product_category/create_product_category", item);
-    } else if (type === "product") {
-      await post_request("products/create_product", item);
-    } else if (type === "ingredient") {
-      await post_request("ingredients/create_ingredient", item);
-    } else if (type === "choice") {
-      await post_request("product_choices/new_product_choice", item);
-    }
+    console.log(item.keys);
+    // if (type === "category") {
+    //   await post_request("product_category/create_product_category", item);
+    // } else if (type === "product") {
+    //   await post_request("products/create_product", item);
+    // } else if (type === "ingredient") {
+    //   await post_request("ingredients/create_ingredient", item);
+    // } else if (type === "choice") {
+    //   await post_request("product_choices/new_product_choice", item);
+    // }
     this.setState({ loading: false });
   };
 
@@ -130,7 +131,11 @@ const ItemForm = ({
     description: isUpdate ? item.description : "",
     price: isUpdate ? item.price : "",
     image: isUpdate ? item.image : "",
-    category_id: isUpdate ? item.category_id : null,
+    category_id: isUpdate
+      ? item.category_id
+      : categories
+      ? categories[0].ID
+      : null,
     custom: isUpdate ? item.custom : false,
     choices_id: isUpdate ? item.choices_id : [],
     ingredients_id: isUpdate ? item.ingredients_id : [],
@@ -643,6 +648,7 @@ const IngredientForm = ({ isUpdate, item, onCreate, onUpdate, categories }) => {
     name: isUpdate ? item.name : "",
     description: isUpdate ? item.description : "",
     price: isUpdate ? item.price : 0,
+    category: isUpdate ? item.category : categories ? categories[0] : null,
   };
   onchange = (e) => {
     ingredient[e.target.name] = e.target.value;
