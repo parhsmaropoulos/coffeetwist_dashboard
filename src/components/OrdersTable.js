@@ -142,11 +142,11 @@ class OrdersTable extends Component {
     const page = this.props.page;
     let orders;
     if (page === "incoming") {
-      orders = this.state.incoming;
+      orders = this.props.incoming;
     } else if (page === "getting_ready") {
-      orders = this.state.accepted;
+      orders = this.props.getting_ready;
     } else if (page === "completed") {
-      orders = this.state.completed;
+      orders = this.props.completed;
     }
     return (
       <div className="col-span-full xl:col-span-9 bg-white shadow-lg rounded-sm border border-gray-200">
