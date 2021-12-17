@@ -9,8 +9,11 @@ import OrdersTable from "./OrdersTable";
 import Sidebar from "./Sidebar";
 import Table from "./Table";
 import TableBanner from "./TableBanner";
+import Sound from "react-sound";
+import song from "../music/indaclub.mp3";
 
 class Dashboard extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.eventSource = new EventSource(current_url + "sse/events/admin");
@@ -20,22 +23,42 @@ class Dashboard extends Component {
       categories: [],
       ingredients: [],
       incoming: [],
-      getting_ready: [],
+      accepted: [],
       completed: [],
       orders: [],
       choices: [],
       selectedCategory: "",
+      isPlaying: false,
+      showToast: false,
+      toastType: "",
+      recievedOrder: false,
     };
+    this.startMusic = this.startMusic.bind(this);
+    this.stopMusic = this.stopMusic.bind(this);
+    this.recieveOrder = this.recieveOrder.bind(this);
+    this.acceptOrder = this.acceptOrder.bind(this);
+    this.rejectOrder = this.rejectOrder.bind(this);
+    this.completeOrder = this.completeOrder.bind(this);
+  }
+
+  startMusic() {
+    this.setState({
+      isPlaying: true,
+    });
+  }
+  stopMusic() {
+    this.setState({
+      isPlaying: false,
+    });
   }
 
   async recieveOrder(order) {
-    let data = JSON.parse(order.data);
-    let incs = this.state.incoming
-      ? this.state.incoming.push(data.order)
-      : [data.order];
-
-    this.setState({ incoming: incs });
-    this.onTabChange("incoming");
+    if (this._isMounted) {
+      let data = JSON.parse(order.data);
+      let incs = this.state.incoming ? this.state.incoming : [];
+      incs.push(data.order);
+      this.setState({ incoming: incs, isPlaying: true, page: "incoming" });
+    }
   }
 
   async acceptOrder(order, time) {
@@ -52,19 +75,17 @@ class Dashboard extends Component {
         { delivery_time: data.time }
       );
       let incoming = this.state.incoming;
-      let getting_ready = this.state.getting_ready
-        ? this.state.getting_ready
-        : [];
+      let accepted = this.state.accepted ? this.state.accepted : [];
       const index = incoming
         ? incoming.findIndex((p) => p.ID === newOrder.ID)
         : 0;
-
-      getting_ready.unshift(incoming[index]);
+      accepted.unshift(incoming[index]);
       incoming.splice(index, 1);
       this.setState({
         incoming: incoming,
-        getting_ready: getting_ready,
+        accepted: accepted,
       });
+      this.stopMusic();
     }
   }
 
@@ -91,6 +112,7 @@ class Dashboard extends Component {
         incoming: incoming,
         // getting_ready: getting_ready,
       });
+      this.stopMusic();
     }
   }
 
@@ -99,28 +121,34 @@ class Dashboard extends Component {
       `admin/orders/${order.ID}/complete_order`,
       null
     );
-    let getting_ready = this.state.getting_ready;
+    let accepted = this.state.accepted;
     let completed = this.state.completed ? this.state.completed : [];
-    const index = getting_ready.findIndex((p) => p.ID === newOrder.ID);
+    const index = accepted.findIndex((p) => p.ID === newOrder.ID);
 
-    completed.unshift(getting_ready[index]);
-    getting_ready.splice(index, 1);
+    completed.unshift(accepted[index]);
+    accepted.splice(index, 1);
     this.setState({
-      getting_ready: getting_ready,
+      accepted: accepted,
       completed: completed,
     });
   }
 
   componentDidMount() {
+    this._isMounted = true;
     this.eventSource.onmessage = (e) => this.recieveOrder(e);
     this.setState({
       page: this.props.location.pathname.split("/")[1],
+      recieveOrder: false,
     });
     this.get_products();
     this.get_orders();
     this.get_categories();
     this.get_ingredients();
     this.get_choices();
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   async get_products() {
@@ -141,7 +169,7 @@ class Dashboard extends Component {
     const orders = await auth_get_request("admin/today");
     this.setState({
       incoming: orders.incoming,
-      getting_ready: orders.getting_ready,
+      accepted: orders.getting_ready,
       completed: orders.completed,
     });
   }
@@ -154,7 +182,7 @@ class Dashboard extends Component {
   }
 
   async get_ingredients() {
-    const res = await auth_get_request("ingredients/all");
+    const res = await auth_get_request("ingredients/al");
     this.setState({
       ingredients: res.ingredients,
       ingredientCategories: res.categories,
@@ -234,6 +262,20 @@ class Dashboard extends Component {
     }
     return (
       <div className="flex h-screen overflow-hidden">
+        <Sound
+          url={song}
+          playStatus={
+            this.state.isPlaying ? Sound.status.PLAYING : Sound.status.STOPPED
+          }
+          playFromPosition={300}
+          // onLoading={handleSongLoading}
+          // onPlaying={handleSongPlaying}
+          // onFinishedPlaying={handleSongFinishedPlaying}
+        />
+        {/* <ToastNotification
+          type={this.state.toastType}
+          showNotification={this.state.showToast}
+        /> */}
         {/* sidebar */}
         <Sidebar
           sidebarOpen={true}
@@ -284,13 +326,14 @@ class Dashboard extends Component {
                     <OrdersTable
                       page={this.state.page}
                       incoming={this.state.incoming}
-                      getting_ready={this.state.getting_ready}
+                      accepted={this.state.accepted}
                       completed={this.state.completed}
                       acceptOrder={(order, time) =>
                         this.acceptOrder(order, time)
                       }
                       completeOrder={(order) => this.completeOrder(order)}
                       rejectOrder={(order) => this.rejectOrder(order)}
+                      stopMusic={this.stopMusic}
                     />
                   </div>
                 </div>

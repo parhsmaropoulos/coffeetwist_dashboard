@@ -13,8 +13,7 @@ export const auth_get_request = async (url) => {
     const res = await axios.get(current_url + url, auth_config);
     return res.data.data;
   } catch (e) {
-    //handle e
-    alert("Error get request");
+    throw e;
   }
 };
 
