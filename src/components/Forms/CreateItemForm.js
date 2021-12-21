@@ -27,16 +27,15 @@ class CreateForm extends Component {
   onCreate = async (e, item, type) => {
     e.preventDefault();
     this.setState({ loading: true });
-    console.log(item.keys);
-    // if (type === "category") {
-    //   await post_request("product_category/create_product_category", item);
-    // } else if (type === "product") {
-    //   await post_request("products/create_product", item);
-    // } else if (type === "ingredient") {
-    //   await post_request("ingredients/create_ingredient", item);
-    // } else if (type === "choice") {
-    //   await post_request("product_choices/new_product_choice", item);
-    // }
+    if (type === "category") {
+      await post_request("product_category/create_product_category", item);
+    } else if (type === "product") {
+      await post_request("products/create_product", item);
+    } else if (type === "ingredient") {
+      await post_request("ingredients/create_ingredient", item);
+    } else if (type === "choice") {
+      await post_request("product_choices/new_product_choice", item);
+    }
     this.setState({ loading: false });
   };
 
