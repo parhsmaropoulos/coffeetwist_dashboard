@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { accept_sse, auth_get_request, put_request } from "../actions/lib";
-import { current_url } from "../utils/util";
+import { auth_get_request, put_request } from "../actions/lib";
 import withAuthorization from "./firebase/withAuthorization";
 import CreateForm from "./Forms/CreateItemForm";
 import Header from "./Header";
@@ -11,12 +10,16 @@ import Table from "./Table";
 import TableBanner from "./TableBanner";
 import Sound from "react-sound";
 import song from "../music/indaclub.mp3";
+import { sendMsg, socket, WebSocketConnect } from "../utils/socket";
 
 class Dashboard extends Component {
   _isMounted = false;
   constructor(props) {
     super(props);
-    this.eventSource = new EventSource(current_url + "sse/events/admin");
+    WebSocketConnect();
+    socket.onmessage = (msg) => {
+      this.recieveOrder(msg);
+    };
     this.state = {
       page: "",
       products: [],
@@ -52,9 +55,9 @@ class Dashboard extends Component {
     });
   }
 
-  async recieveOrder(order) {
+  async recieveOrder(socketData) {
     if (this._isMounted) {
-      let data = JSON.parse(order.data);
+      let data = JSON.parse(socketData.data);
       let incs = this.state.incoming ? this.state.incoming : [];
       incs.push(data.order);
       this.setState({ incoming: incs, isPlaying: true, page: "incoming" });
@@ -66,27 +69,25 @@ class Dashboard extends Component {
       id: String(order.ID),
       accepted: true,
       time: time,
-      from: order.from_id,
+      from: "admin",
+      to: order.from_id,
     };
-    const res = await accept_sse(`sse/acceptorder`, data);
-    if (res === true) {
-      const newOrder = await put_request(
-        `admin/orders/${data.id}/accept_order`,
-        { delivery_time: data.time }
-      );
-      let incoming = this.state.incoming;
-      let accepted = this.state.accepted ? this.state.accepted : [];
-      const index = incoming
-        ? incoming.findIndex((p) => p.ID === newOrder.ID)
-        : 0;
-      accepted.unshift(incoming[index]);
-      incoming.splice(index, 1);
-      this.setState({
-        incoming: incoming,
-        accepted: accepted,
-      });
-      this.stopMusic();
-    }
+    sendMsg(JSON.stringify(data));
+    const newOrder = await put_request(`admin/orders/${data.id}/accept_order`, {
+      delivery_time: data.time,
+    });
+    let incoming = this.state.incoming;
+    let accepted = this.state.accepted ? this.state.accepted : [];
+    const index = incoming
+      ? incoming.findIndex((p) => p.ID === newOrder.ID)
+      : 0;
+    accepted.unshift(incoming[index]);
+    incoming.splice(index, 1);
+    this.setState({
+      incoming: incoming,
+      accepted: accepted,
+    });
+    this.stopMusic();
   }
 
   async rejectOrder(order) {
@@ -94,26 +95,26 @@ class Dashboard extends Component {
       id: String(order.ID),
       accepted: false,
       time: 0,
-      from: order.from_id,
+      from: "admin",
+      to: order.from_id,
     };
-    const res = await accept_sse(`sse/acceptorder`, data);
-    if (res === true) {
-      const newOrder = await put_request(
-        `admin/orders/${data.id}/cancel_order`,
-        null
-      );
-      let incoming = this.state.incoming;
-      // TODO create cancel order list
-      // let getting_ready = this.state.getting_ready;
-      const index = incoming.findIndex((p) => p.ID === newOrder.ID);
-      // getting_ready.unshift(incoming[index]);
-      incoming.splice(index, 1);
-      this.setState({
-        incoming: incoming,
-        // getting_ready: getting_ready,
-      });
-      this.stopMusic();
-    }
+    sendMsg(JSON.stringify(data));
+
+    const newOrder = await put_request(
+      `admin/orders/${data.id}/cancel_order`,
+      null
+    );
+    let incoming = this.state.incoming;
+    // TODO create cancel order list
+    // let getting_ready = this.state.getting_ready;
+    const index = incoming.findIndex((p) => p.ID === newOrder.ID);
+    // getting_ready.unshift(incoming[index]);
+    incoming.splice(index, 1);
+    this.setState({
+      incoming: incoming,
+      // getting_ready: getting_ready,
+    });
+    this.stopMusic();
   }
 
   async completeOrder(order) {
@@ -135,7 +136,6 @@ class Dashboard extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    this.eventSource.onmessage = (e) => this.recieveOrder(e);
     this.setState({
       page: this.props.location.pathname.split("/")[1],
       recieveOrder: false,
