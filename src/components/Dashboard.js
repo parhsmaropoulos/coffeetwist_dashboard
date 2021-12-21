@@ -182,7 +182,7 @@ class Dashboard extends Component {
   }
 
   async get_ingredients() {
-    const res = await auth_get_request("ingredients/al");
+    const res = await auth_get_request("ingredients/all");
     this.setState({
       ingredients: res.ingredients,
       ingredientCategories: res.categories,
