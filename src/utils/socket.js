@@ -6,20 +6,16 @@ const socket = new WebSocket(
   }/ws/admin`
 );
 
-let WebSocketConnect = () => {
-  console.log("Attempting Connection...");
+socket.onopen = () => {
+  console.log("Successfully Connected");
+};
 
-  socket.onopen = () => {
-    console.log("Successfully Connected");
-  };
+socket.onclose = (event) => {
+  console.log("Socket Closed Connection: ", event);
+};
 
-  socket.onclose = (event) => {
-    console.log("Socket Closed Connection: ", event);
-  };
-
-  socket.onerror = (error) => {
-    console.log("Socket Error: ", error);
-  };
+socket.onerror = (error) => {
+  console.log("Socket Error: ", error);
 };
 
 let sendMsg = (msg) => {
@@ -27,4 +23,4 @@ let sendMsg = (msg) => {
   socket.send(msg);
 };
 
-export { WebSocketConnect, sendMsg, socket };
+export { sendMsg, socket };

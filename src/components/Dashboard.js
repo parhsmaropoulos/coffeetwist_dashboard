@@ -10,13 +10,12 @@ import Table from "./Table";
 import TableBanner from "./TableBanner";
 import Sound from "react-sound";
 import song from "../music/indaclub.mp3";
-import { sendMsg, socket, WebSocketConnect } from "../utils/socket";
+import { sendMsg, socket } from "../utils/socket";
 
 class Dashboard extends Component {
   _isMounted = false;
   constructor(props) {
     super(props);
-    WebSocketConnect();
     socket.onmessage = (msg) => {
       this.recieveOrder(msg);
     };
