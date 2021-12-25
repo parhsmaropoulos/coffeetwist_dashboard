@@ -27,7 +27,7 @@ let connect = () => {
       process.env.REACT_APP_ENV === "dev"
         ? "ws://localhost:8080"
         : "wss://api.ct-dashboard.gr"
-    }/ws/${sessionStorage.getItem("userID")}`
+    }/ws/admin`
   );
 
   console.log("Attempting Connection...");
