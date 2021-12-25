@@ -32,7 +32,7 @@ export async function put_request(url, data) {
   try {
     let auth_config = config;
     const res = await axios.put(current_url + url, data, auth_config);
-    console.log(res);
+    // console.log(res);
     return res.data.data;
   } catch (e) {
     // console.log(e.response);

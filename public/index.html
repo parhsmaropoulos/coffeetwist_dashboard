@@ -28,38 +28,6 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <!-- <script>
-      var conn;
-      // Then you need to connect
-      function connectWs(id) {
-        if (window["WebSocket"]) {
-          conn = new WebSocket("ws://" + "localhost:8080/admin"); // Pass the right URL
-          conn.onopen = function (evt) {
-            var item = document.createElement("li");
-            item.innerHTML = "<em>Connected to " + id + "</em>";
-            log.appendChild(item);
-            console.log("connected to admin");
-          };
-          conn.onclose = function (evt) {
-            var item = document.createElement("li");
-            item.innerHTML = "<em>Connection to " + id + " closed</em>";
-            log.appendChild(item);
-            console.log("connected to admin closed");
-          };
-          conn.onmessage = function (evt) {
-            var message = JSON.parse(evt.data);
-            // console.log(message);
-            printMessage(message);
-          };
-        } else {
-          var item = document.createElement("li");
-          item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
-          log.appendChild(item);
-          console.log("Your browser does not support WebSockets.");
-        }
-        connectWs(id);
-      }
-    </script> -->
     <div id="root"></div>
     <!--
       This HTML file is a template.
