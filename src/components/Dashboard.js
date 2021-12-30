@@ -56,10 +56,12 @@ class Dashboard extends Component {
 
   async recieveOrder(socketData) {
     if (this._isMounted) {
-      let data = JSON.parse(socketData.data);
-      let incs = this.state.incoming ? this.state.incoming : [];
-      incs.push(data.order);
-      this.setState({ incoming: incs, isPlaying: true, page: "incoming" });
+      // let data = JSON.parse(socketData.data);
+      // let incs = this.state.incoming ? this.state.incoming : [];
+      // incs.push(data.order);
+      // this.setState({ incoming: incs, isPlaying: true, page: "incoming" });
+      await this.get_orders();
+      this.setState({ isPlaying: true, page: "incoming" });
     }
   }
 
