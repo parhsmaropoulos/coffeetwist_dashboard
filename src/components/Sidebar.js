@@ -112,11 +112,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen, onTabChange }) {
               page={page}
               onTabChange={(pathname) => tabChange(pathname)}
             />
-            <Settings
+            {/* <Settings
               key={"stngs"}
               page={page}
               onTabChange={(pathname) => tabChange(pathname)}
-            />
+            /> */}
           </ul>
           <h3 className="text-xs uppercase text-gray-500 font-semibold pl-3">
             Δημιουργία
@@ -267,29 +267,29 @@ const Ingredients = ({ page, onTabChange }) => {
     </li>
   );
 };
-const Settings = ({ page, onTabChange }) => {
-  return (
-    <li
-      key={6}
-      className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
-        page === "settings" && "bg-gray-900"
-      }`}
-    >
-      <NavLink
-        // exact
-        to="/settings"
-        onClick={() => onTabChange("settings")}
-        className={`block text-gray-200 hover:text-white transition duration-150 ${
-          page === "settings" && "hover:text-gray-200"
-        }`}
-      >
-        <div className="flex flex-grow">
-          <span className="text-sm font-medium"> Ρυθμίσεις</span>
-        </div>
-      </NavLink>
-    </li>
-  );
-};
+// const Settings = ({ page, onTabChange }) => {
+//   return (
+//     <li
+//       key={6}
+//       className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
+//         page === "settings" && "bg-gray-900"
+//       }`}
+//     >
+//       <NavLink
+//         // exact
+//         to="/settings"
+//         onClick={() => onTabChange("settings")}
+//         className={`block text-gray-200 hover:text-white transition duration-150 ${
+//           page === "settings" && "hover:text-gray-200"
+//         }`}
+//       >
+//         <div className="flex flex-grow">
+//           <span className="text-sm font-medium"> Ρυθμίσεις</span>
+//         </div>
+//       </NavLink>
+//     </li>
+//   );
+// };
 export default Sidebar;
 
 const CreateProduct = ({ page, onTabChange }) => {
