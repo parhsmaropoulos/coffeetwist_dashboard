@@ -10,13 +10,14 @@ import Table from "./Table";
 import TableBanner from "./TableBanner";
 import Sound from "react-sound";
 import song from "../music/indaclub.mp3";
-import { sendMsg, socket } from "../utils/socket";
+import { sendMsg, wsConnection } from "../utils/socket";
 
 class Dashboard extends Component {
   _isMounted = false;
   constructor(props) {
     super(props);
-    socket.onmessage = (msg) => {
+    this.socket = wsConnection();
+    this.socket.onmessage = (msg) => {
       this.recieveOrder(msg);
     };
     this.state = {
@@ -73,7 +74,7 @@ class Dashboard extends Component {
       from: "admin",
       to: order.from_id,
     };
-    sendMsg(JSON.stringify(data));
+    sendMsg(JSON.stringify(data), this.socket);
     const newOrder = await put_request(`admin/orders/${data.id}/accept_order`, {
       delivery_time: data.time,
     });
@@ -99,7 +100,7 @@ class Dashboard extends Component {
       from: "admin",
       to: order.from_id,
     };
-    sendMsg(JSON.stringify(data));
+    sendMsg(JSON.stringify(data), this.socket);
 
     const newOrder = await put_request(
       `admin/orders/${data.id}/cancel_order`,

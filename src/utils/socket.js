@@ -1,54 +1,32 @@
-const socket = new WebSocket(
-  `${
-    process.env.REACT_APP_ENV === "dev"
-      ? "ws://localhost:8080"
-      : "wss://api.ct-dashboard.gr"
-  }/ws/admin`
-);
+let wsConnection = () => {
+  const socket = new WebSocket(
+    `${
+      process.env.REACT_APP_ENV === "dev"
+        ? "ws://localhost:8080"
+        : "wss://api.ct-dashboard.gr"
+    }/ws/admin`
+  );
 
-console.log("Attempting Connection...");
+  console.log("Attempting Connection...");
+  sessionStorage.setItem("wsConnectionValid", true);
 
-socket.onopen = () => {
-  console.log("Successfully Connected");
+  socket.onopen = () => {
+    console.log("Successfully Connected");
+  };
+
+  socket.onclose = (event) => {
+    console.log("Socket Closed Connection: ", event);
+    sessionStorage.setItem("wsConnectionValid", false);
+  };
+
+  socket.onerror = (error) => {
+    console.log("Socket Error: ", error);
+  };
+  return socket;
 };
 
-socket.onclose = (event) => {
-  console.log("Socket Closed Connection: ", event);
-  // connect();
-};
-
-socket.onerror = (error) => {
-  console.log("Socket Error: ", error);
-};
-
-// let connect = () => {
-//   const socket = new WebSocket(
-//     `${
-//       process.env.REACT_APP_ENV === "dev"
-//         ? "ws://localhost:8080"
-//         : "wss://api.ct-dashboard.gr"
-//     }/ws/admin`
-//   );
-
-//   console.log("Attempting Connection...");
-
-//   socket.onopen = () => {
-//     console.log("Successfully Connected");
-//   };
-
-//   socket.onclose = (event) => {
-//     console.log("Socket Closed Connection: ", event);
-//     connect();
-//   };
-
-//   socket.onerror = (error) => {
-//     console.log("Socket Error: ", error);
-//   };
-// };
-
-let sendMsg = (msg) => {
-  //   console.log("sending msg: ", msg);
+let sendMsg = (msg, socket) => {
   socket.send(msg);
 };
 
-export { sendMsg, socket };
+export { sendMsg, wsConnection };
