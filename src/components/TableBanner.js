@@ -68,9 +68,17 @@ function TableBanner() {
 
       {/* Content */}
       <div className="relative">
-        <h1 className="text-2xl md:text-3xl text-gray-800 font-bold mb-1">
-          Γειά σου φίλε μου. 👋
-        </h1>
+        {sessionStorage.getItem("wsConnectionValid") ? (
+          <h1 className="text-2xl md:text-3xl text-gray-800 font-bold mb-1">
+            {/* Γειά σου φίλε μου. 👋 */}
+            Welcome Back !
+          </h1>
+        ) : (
+          <h1 className="text-2xl md:text-3xl text-gray-800 font-bold mb-1">
+            {/* Γειά σου φίλε μου. 👋 */}
+            Refresh Please !
+          </h1>
+        )}
       </div>
     </div>
   );
