@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { put_request } from "../actions/lib";
 import "../css/slider.css";
+import ToastNotification from "./ToastNotification";
 
 class Table extends Component {
   constructor(props) {
@@ -30,29 +31,33 @@ class Table extends Component {
 
   async changeAvailability(id, type) {
     if (type === "product") {
-      const newProduct = await put_request(
-        `products/${id}/change_availability`
-      );
-      let newProducts = this.state.products;
-      const index = newProducts.findIndex((p) => p.ID === newProduct.ID);
-      if (index !== -1) {
-        newProducts[index] = newProduct;
+      const res = await put_request(`products/${id}/change_availability`);
+      if (res && res.code === 200) {
+        let newProduct = res.data;
+        let newProducts = this.state.products;
+        const index = newProducts.findIndex((p) => p.ID === newProduct.ID);
+        if (index !== -1) {
+          newProducts[index] = newProduct;
+        }
+        this.setState({
+          products: newProducts,
+        });
       }
-      this.setState({
-        products: newProducts,
-      });
     } else {
-      const newIngredient = await put_request(
-        `ingredients/${id}/change_availability`
-      );
-      let newIngredients = this.state.ingredients;
-      const index = newIngredients.findIndex((p) => p.ID === newIngredient.ID);
-      if (index !== -1) {
-        newIngredients[index] = newIngredient;
+      const res = await put_request(`ingredients/${id}/change_availability`);
+      if (res && res.code === 200) {
+        let newIngredient = res.data;
+        let newIngredients = this.state.ingredients;
+        const index = newIngredients.findIndex(
+          (p) => p.ID === newIngredient.ID
+        );
+        if (index !== -1) {
+          newIngredients[index] = newIngredient;
+        }
+        this.setState({
+          ingredients: newIngredients,
+        });
       }
-      this.setState({
-        products: newIngredients,
-      });
     }
   }
 
