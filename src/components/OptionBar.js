@@ -56,7 +56,7 @@ const IngredientsSidebar = ({ options, onCategoryChange }) => {
                 key={idx}
                 onClick={() => onCategoryChange(o, "ingredients")}
                 className={`px-2 py-2 text-center rounded-sm mb-0.5 last:mb-0 hover:bg-gray-600 ${
-                  +selectedCategory === o && "bg-blue-300"
+                  selectedCategory === o && "bg-blue-300"
                 } `}
               >
                 <div className=" text-center flex-grow">
@@ -80,7 +80,7 @@ const ProductsSidebar = ({ options, onCategoryChange }) => {
                 key={idx}
                 onClick={() => onCategoryChange(o.ID, "products")}
                 className={`px-2 py-2 text-center rounded-sm mb-0.5 last:mb-0 hover:bg-gray-600 ${
-                  +selectedCategory === o.ID && "bg-gray-300"
+                  +selectedCategory === o.ID && "bg-blue-300"
                 } `}
               >
                 <div className=" text-center flex-grow">

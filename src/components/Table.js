@@ -64,7 +64,7 @@ class Table extends Component {
   render() {
     const page = this.props.page;
     const productCategoryId = sessionStorage.getItem("productTab");
-    const ingredientsCategoryId = sessionStorage.getItem("ingredientTab");
+    const ingredientsCategory = sessionStorage.getItem("ingredientTab");
     return (
       <div className="col-span-full xl:col-span-8 bg-white shadow-lg rounded-sm border border-gray-200">
         <header className="px-5 py-4 border-b border-gray-100">
@@ -101,7 +101,7 @@ class Table extends Component {
                 ) : (
                   <IngredientsTable
                     ingredients={this.state.ingredients}
-                    selectedCategory={+ingredientsCategoryId}
+                    selectedCategory={ingredientsCategory}
                     changeAvailability={(id) =>
                       this.changeIngrdientAvailability(id)
                     }

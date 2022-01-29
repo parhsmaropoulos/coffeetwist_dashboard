@@ -233,10 +233,10 @@ class Dashboard extends Component {
   onCategoryChange(selected, category) {
     if (category === "products") {
       sessionStorage.setItem("productTab", selected);
-      this.get_products();
-      this.get_categories();
+      this.setState({ selectedCategory: selected });
     } else if (category === "ingredients") {
       sessionStorage.setItem("ingredientTab", selected);
+      this.setState({ selectedCategory: selected });
     }
   }
 
