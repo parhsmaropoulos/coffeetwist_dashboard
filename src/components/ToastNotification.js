@@ -10,11 +10,11 @@ const ToastNotification = ({ showNotification, type, message }) => {
         clearTimeout(timeout);
       };
     }
-  }, []);
+  }, [show]);
 
   return (
     <>
-      {show === false ? null : (
+      {show && (
         <div className="flex flex-col jusctify-center">
           {type === "success" && (
             /* <!-- Toast Notification Success--> */

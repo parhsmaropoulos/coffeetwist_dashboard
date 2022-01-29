@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { put_request } from "../actions/lib";
 import "../css/slider.css";
-import ToastNotification from "./ToastNotification";
 
 class Table extends Component {
   constructor(props) {
@@ -30,6 +29,8 @@ class Table extends Component {
   };
 
   async changeAvailability(id, type) {
+    let message = "";
+    let toastType = "";
     if (type === "product") {
       const res = await put_request(`products/${id}/change_availability`);
       if (res && res.code === 200) {
@@ -39,9 +40,14 @@ class Table extends Component {
         if (index !== -1) {
           newProducts[index] = newProduct;
         }
+        toastType = "success";
+        message = "All good!";
         this.setState({
           products: newProducts,
         });
+      } else {
+        toastType = "danger";
+        message = "Error on change!";
       }
     } else {
       const res = await put_request(`ingredients/${id}/change_availability`);
@@ -57,8 +63,14 @@ class Table extends Component {
         this.setState({
           ingredients: newIngredients,
         });
+        toastType = "success";
+        message = "All good!";
+      } else {
+        toastType = "danger";
+        message = "Error on change!";
       }
     }
+    this.props.onShowNotification(toastType, message);
   }
 
   render() {

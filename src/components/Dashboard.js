@@ -10,6 +10,7 @@ import TableBanner from "./TableBanner";
 import Sound from "react-sound";
 import song from "../music/indaclub.mp3";
 import { sendMsg, wsConnection } from "../utils/socket";
+import ToastNotification from "./ToastNotification";
 
 class Dashboard extends Component {
   _isMounted = false;
@@ -42,6 +43,7 @@ class Dashboard extends Component {
     this.rejectOrder = this.rejectOrder.bind(this);
     this.completeOrder = this.completeOrder.bind(this);
     this.onCreate = this.onCreate.bind(this);
+    this.onShowNotification = this.onShowNotification.bind(this);
   }
 
   startMusic() {
@@ -240,6 +242,11 @@ class Dashboard extends Component {
     }
   }
 
+  onShowNotification(type, message) {
+    console.log("here");
+    this.setState({ showToast: true, toastType: type, toastMessage: message });
+  }
+
   render() {
     let table = "products";
     let showCreate = false;
@@ -271,6 +278,11 @@ class Dashboard extends Component {
     }
     return (
       <div className="flex h-screen overflow-hidden">
+        <ToastNotification
+          showNotification={this.state.showToast}
+          type={this.state.toastType}
+          message={this.state.toastMessage}
+        />
         <Sound
           url={song}
           playStatus={
@@ -281,10 +293,6 @@ class Dashboard extends Component {
           // onPlaying={handleSongPlaying}
           // onFinishedPlaying={handleSongFinishedPlaying}
         />
-        {/* <ToastNotification
-          type={this.state.toastType}
-          showNotification={this.state.showToast}
-        /> */}
         {/* sidebar */}
         <Sidebar
           sidebarOpen={true}
@@ -319,6 +327,7 @@ class Dashboard extends Component {
                       page={this.state.page}
                       products={this.state.products}
                       ingredients={this.state.ingredients}
+                      onShowNotification={this.onShowNotification}
                     />
                   </div>
                 </div>
@@ -341,6 +350,7 @@ class Dashboard extends Component {
                       completeOrder={(order) => this.completeOrder(order)}
                       rejectOrder={(order) => this.rejectOrder(order)}
                       stopMusic={this.stopMusic}
+                      onShowNotification={this.onShowNotification}
                     />
                   </div>
                 </div>
