@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from "react";
 
-const ToastNotification = ({ showNotification, type }) => {
+const ToastNotification = ({ showNotification, type, message }) => {
+  const [show, setShow] = useState(showNotification);
+
   useEffect(() => {
-    setTimeout(() => {}, 5000);
+    if (show) {
+      const timeout = setTimeout(() => setShow(false), 3000);
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
   }, []);
 
   return (
     <>
-      {showNotification === false ? null : (
-        <div class="flex flex-col jusctify-center">
+      {show === false ? null : (
+        <div className="flex flex-col jusctify-center">
           {type === "success" && (
             /* <!-- Toast Notification Success--> */
-            <div class="flex items-center bg-green-500 border-l-4 border-green-700 py-2 px-3 shadow-md mb-2">
-              <div class="text-green-500 rounded-full bg-white mr-3">
+            <div className="flex items-center bg-green-500 border-l-4 border-green-700 py-2 px-3 shadow-md mb-2">
+              <div className="text-green-500 rounded-full bg-white mr-3">
                 <svg
                   width="1.8em"
                   height="1.8em"
                   viewBox="0 0 16 16"
-                  class="bi bi-check"
+                  className="bi bi-check"
                   fill="currentColor"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -27,18 +34,17 @@ const ToastNotification = ({ showNotification, type }) => {
                   />
                 </svg>
               </div>
-              <div class="text-white max-w-xs ">ini pesan ketika sukses</div>
+              <div className="text-white max-w-xs ">{message}</div>
             </div>
           )}
-
           {type === "info" /* <!-- Toast Notification Info --> */ && (
-            <div class="flex items-center bg-blue-400 border-l-4 border-blue-700 py-2 px-3 shadow-md mb-2">
-              <div class="text-blue-500 rounded-full bg-white mr-3">
+            <div className="flex items-center bg-blue-400 border-l-4 border-blue-700 py-2 px-3 shadow-md mb-2">
+              <div className="text-blue-500 rounded-full bg-white mr-3">
                 <svg
                   width="1.8em"
                   height="1.8em"
                   viewBox="0 0 16 16"
-                  class="bi bi-info"
+                  className="bi bi-info"
                   fill="currentColor"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -46,39 +52,34 @@ const ToastNotification = ({ showNotification, type }) => {
                   <circle cx="8" cy="4.5" r="1" />
                 </svg>
               </div>
-              <div class="text-white max-w-xs ">
-                ini pesan ketika ada informasi
-              </div>
+              <div className="text-white max-w-xs ">{message}</div>
             </div>
           )}
           {type === "warning" /* <!-- Toast Notification Warning --> */ && (
-            <div class="flex items-center bg-orange-400 border-l-4 border-orange-700 py-2 px-3 shadow-md mb-2">
-              <div class="text-orange-500 rounded-full bg-white mr-3">
+            <div className="flex items-center bg-orange-400 border-l-4 border-orange-700 py-2 px-3 shadow-md mb-2">
+              <div className="text-orange-500 rounded-full bg-white mr-3">
                 <svg
                   width="1.8em"
                   height="1.8em"
                   viewBox="0 0 16 16"
-                  class="bi bi-exclamation"
+                  className="bi bi-exclamation"
                   fill="currentColor"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z" />
                 </svg>
               </div>
-              <div class="text-white max-w-xs ">
-                ini pesan ketika ada warning
-              </div>
+              <div className="text-white max-w-xs ">{message}</div>
             </div>
           )}
-
           {type === "danger" /* <!-- Toast Notification Danger --> */ && (
-            <div class="flex items-center bg-red-500 border-l-4 border-red-700 py-2 px-3 shadow-md mb-2">
-              <div class="text-red-500 rounded-full bg-white mr-3">
+            <div className="flex items-center bg-red-500 border-l-4 border-red-700 py-2 px-3 shadow-md mb-2">
+              <div className="text-red-500 rounded-full bg-white mr-3">
                 <svg
                   width="1.8em"
                   height="1.8em"
                   viewBox="0 0 16 16"
-                  class="bi bi-x"
+                  className="bi bi-x"
                   fill="currentColor"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -93,7 +94,7 @@ const ToastNotification = ({ showNotification, type }) => {
                 </svg>
               </div>
 
-              <div class="text-white max-w-xs ">ini pesan ketika ada error</div>
+              <div className="text-white max-w-xs ">{message}</div>
             </div>
           )}
         </div>

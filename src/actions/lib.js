@@ -13,7 +13,7 @@ export const auth_get_request = async (url) => {
     const res = await axios.get(current_url + url, auth_config);
     return res.data.data;
   } catch (e) {
-    throw e;
+    return e.response;
   }
 };
 
@@ -24,7 +24,7 @@ export async function get_request(url) {
     // console.log(res);
     return res.data.data;
   } catch (e) {
-    alert("Error with get request");
+    return e.response;
   }
 }
 
@@ -35,8 +35,7 @@ export async function put_request(url, data) {
     // console.log(res);
     return res.data.data;
   } catch (e) {
-    // console.log(e.response);
-    alert("Error with put request");
+    return e.response;
   }
 }
 
@@ -44,10 +43,9 @@ export async function post_request(url, data) {
   try {
     let auth_config = config;
     const res = await axios.post(current_url + url, data, auth_config);
-    return res.data.data;
+    return res.data;
   } catch (e) {
-    console.log(e.response);
-    alert("Error with post request");
+    return e.response;
   }
 }
 
@@ -57,8 +55,7 @@ export async function accept_sse(url, data) {
     await axios.post(current_url + url, data, auth_config);
     return true;
   } catch (e) {
-    alert("Error with post request");
-    return false;
+    return e.response;
   }
 }
 

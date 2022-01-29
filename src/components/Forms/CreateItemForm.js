@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { post_request } from "../../actions/lib";
+import ToastNotification from "../ToastNotification";
 import OptionModal from "./OptionModal";
 
 class CreateForm extends Component {
@@ -11,6 +12,9 @@ class CreateForm extends Component {
       options: [],
       loading: false,
       item: {},
+      showNotification: false,
+      notificationType: "",
+      notificationMessage: "",
     };
     this.onCreate = this.onCreate.bind(this);
     this.setOpen = this.setOpen.bind(this);
@@ -27,16 +31,58 @@ class CreateForm extends Component {
   onCreate = async (e, item, type) => {
     e.preventDefault();
     this.setState({ loading: true });
+    let notificationType = "";
+    let message = "";
+    let res;
     if (type === "category") {
-      await post_request("product_category/create_product_category", item);
+      res = await post_request(
+        "product_category/create_product_category",
+        item
+      );
+      if (res && res.code === 200) {
+        notificationType = "success";
+        message = "Product category created successfully";
+      } else {
+        notificationType = "danger";
+        message = `Error creating category! \n ${res.data.message}`;
+      }
     } else if (type === "product") {
-      await post_request("products/create_product", item);
+      res = await post_request("products/create_product", item);
+      if (res && res.code === 200) {
+        notificationType = "success";
+        message = "Product  created successfully";
+      } else {
+        notificationType = "danger";
+        message = `Error creating product! \n ${res.data.message}`;
+      }
     } else if (type === "ingredient") {
-      await post_request("ingredients/create_ingredient", item);
+      res = await post_request("ingredients/create_ingredient", item);
+      if (res && res.code === 200) {
+        notificationType = "success";
+        message = "Ingredient created successfully";
+      } else {
+        notificationType = "danger";
+        message = `Error creating ingredient! \n ${res.data.message}`;
+      }
     } else if (type === "choice") {
-      await post_request("product_choices/new_product_choice", item);
+      res = await post_request("product_choices/new_product_choice", item);
+      if (res && res.code === 200) {
+        notificationType = "success";
+        message = "Product choice created successfully";
+      } else {
+        notificationType = "danger";
+        message = `Error creating choice! \n ${res.data.message}`;
+      }
     }
-    this.setState({ loading: false });
+    this.setState({
+      loading: false,
+      showNotification: true,
+      notificationType: notificationType,
+      notificationMessage: message,
+    });
+    if (notificationType === "success") {
+      this.props.onCreate();
+    }
   };
 
   setOpen() {
@@ -68,6 +114,11 @@ class CreateForm extends Component {
     }
     return (
       <div>
+        <ToastNotification
+          showNotification={this.state.showNotification}
+          type={this.state.notificationType}
+          message={this.state.notificationMessage}
+        />
         {page === "product" ? (
           <ItemForm
             isUpdate={false}
@@ -132,7 +183,7 @@ const ItemForm = ({
     image: isUpdate ? item.image : "",
     category_id: isUpdate
       ? item.category_id
-      : categories
+      : categories.length > 0
       ? categories[0].ID
       : null,
     custom: isUpdate ? item.custom : false,
