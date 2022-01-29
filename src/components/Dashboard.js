@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { auth_get_request, put_request } from "../actions/lib";
 import withAuthorization from "./firebase/withAuthorization";
 import CreateForm from "./Forms/CreateItemForm";
-import Header from "./Header";
 import OptionBar from "./OptionBar";
 import OrdersTable from "./OrdersTable";
 import Sidebar from "./Sidebar";
@@ -42,6 +41,7 @@ class Dashboard extends Component {
     this.acceptOrder = this.acceptOrder.bind(this);
     this.rejectOrder = this.rejectOrder.bind(this);
     this.completeOrder = this.completeOrder.bind(this);
+    this.onCreate = this.onCreate.bind(this);
   }
 
   startMusic() {
@@ -151,6 +151,13 @@ class Dashboard extends Component {
 
   componentWillUnmount() {
     this._isMounted = false;
+  }
+
+  onCreate() {
+    this.get_products();
+    this.get_categories();
+    this.get_ingredients();
+    this.get_choices();
   }
 
   async get_products() {
@@ -285,9 +292,7 @@ class Dashboard extends Component {
         />
         {/** Content area */}
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-          {/** Site header */}
           {/* <Header /> */}
-
           <main>
             {/**Welcome banner */}
             <TableBanner />
@@ -349,6 +354,7 @@ class Dashboard extends Component {
                     choices={this.state.choices}
                     ingredients={this.state.ingredients}
                     ingredientCategories={this.state.ingredientCategories}
+                    onCreate={this.onCreate}
                   />
                 </div>
               </div>
