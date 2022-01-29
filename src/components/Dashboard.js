@@ -8,7 +8,7 @@ import Sidebar from "./Sidebar";
 import Table from "./Table";
 import TableBanner from "./TableBanner";
 import Sound from "react-sound";
-import song from "../music/indaclub.mp3";
+// import song from "../music/indaclub.mp3";
 import { sendMsg, wsConnection } from "../utils/socket";
 import ToastNotification from "./ToastNotification";
 
@@ -48,6 +48,7 @@ class Dashboard extends Component {
 
   startMusic() {
     this.setState({
+      page: "incoming",
       isPlaying: true,
     });
   }
@@ -59,10 +60,6 @@ class Dashboard extends Component {
 
   async recieveOrder(socketData) {
     if (this._isMounted) {
-      // let data = JSON.parse(socketData.data);
-      // let incs = this.state.incoming ? this.state.incoming : [];
-      // incs.push(data.order);
-      // this.setState({ incoming: incs, isPlaying: true, page: "incoming" });
       await this.get_orders();
       this.setState({ isPlaying: true, page: "incoming" });
     }
@@ -77,21 +74,24 @@ class Dashboard extends Component {
       to: order.from_id,
     };
     sendMsg(JSON.stringify(data), this.socket);
-    const newOrder = await put_request(`admin/orders/${data.id}/accept_order`, {
+    const res = await put_request(`admin/orders/${data.id}/accept_order`, {
       delivery_time: data.time,
     });
-    let incoming = this.state.incoming;
-    let accepted = this.state.accepted ? this.state.accepted : [];
-    const index = incoming
-      ? incoming.findIndex((p) => p.ID === newOrder.ID)
-      : 0;
-    accepted.unshift(incoming[index]);
-    incoming.splice(index, 1);
-    this.setState({
-      incoming: incoming,
-      accepted: accepted,
-    });
-    this.stopMusic();
+    if (res && res.code === 200) {
+      const newOrder = res.data;
+      let incoming = this.state.incoming;
+      let accepted = this.state.accepted ? this.state.accepted : [];
+      const index = incoming
+        ? incoming.findIndex((p) => p.ID === newOrder.ID)
+        : 0;
+      accepted.unshift(incoming[index]);
+      incoming.splice(index, 1);
+      this.setState({
+        incoming: incoming,
+        accepted: accepted,
+      });
+      this.stopMusic();
+    }
   }
 
   async rejectOrder(order) {
@@ -104,38 +104,41 @@ class Dashboard extends Component {
     };
     sendMsg(JSON.stringify(data), this.socket);
 
-    const newOrder = await put_request(
-      `admin/orders/${data.id}/cancel_order`,
-      null
-    );
-    let incoming = this.state.incoming;
-    // TODO create cancel order list
-    // let getting_ready = this.state.getting_ready;
-    const index = incoming.findIndex((p) => p.ID === newOrder.ID);
-    // getting_ready.unshift(incoming[index]);
-    incoming.splice(index, 1);
-    this.setState({
-      incoming: incoming,
-      // getting_ready: getting_ready,
-    });
+    const res = await put_request(`admin/orders/${data.id}/cancel_order`, null);
+    if (res && res.code === 200) {
+      const newOrder = res.data;
+      let incoming = this.state.incoming;
+      // TODO create cancel order list
+      // let getting_ready = this.state.getting_ready;
+      const index = incoming.findIndex((p) => p.ID === newOrder.ID);
+      // getting_ready.unshift(incoming[index]);
+      incoming.splice(index, 1);
+      this.setState({
+        incoming: incoming,
+        // getting_ready: getting_ready,
+      });
+    }
     this.stopMusic();
   }
 
   async completeOrder(order) {
-    const newOrder = await put_request(
+    const res = await put_request(
       `admin/orders/${order.ID}/complete_order`,
       null
     );
-    let accepted = this.state.accepted;
-    let completed = this.state.completed ? this.state.completed : [];
-    const index = accepted.findIndex((p) => p.ID === newOrder.ID);
+    if (res && res.code === 200) {
+      const newOrder = res.data;
+      let accepted = this.state.accepted;
+      let completed = this.state.completed ? this.state.completed : [];
+      const index = accepted.findIndex((p) => p.ID === newOrder.ID);
 
-    completed.unshift(accepted[index]);
-    accepted.splice(index, 1);
-    this.setState({
-      accepted: accepted,
-      completed: completed,
-    });
+      completed.unshift(accepted[index]);
+      accepted.splice(index, 1);
+      this.setState({
+        accepted: accepted,
+        completed: completed,
+      });
+    }
   }
 
   componentDidMount() {
@@ -284,14 +287,12 @@ class Dashboard extends Component {
           message={this.state.toastMessage}
         />
         <Sound
-          url={song}
+          volume={100}
+          url={"indaclub.mp3"}
           playStatus={
             this.state.isPlaying ? Sound.status.PLAYING : Sound.status.STOPPED
           }
           playFromPosition={300}
-          // onLoading={handleSongLoading}
-          // onPlaying={handleSongPlaying}
-          // onFinishedPlaying={handleSongFinishedPlaying}
         />
         {/* sidebar */}
         <Sidebar
