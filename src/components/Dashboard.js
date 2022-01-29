@@ -287,6 +287,7 @@ class Dashboard extends Component {
           message={this.state.toastMessage}
         />
         <Sound
+          autoLoad={true}
           volume={100}
           url={"indaclub.mp3"}
           playStatus={
