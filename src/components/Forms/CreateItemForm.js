@@ -226,7 +226,15 @@ const ItemForm = ({
       product.ingredients_id.push(id);
     }
   }
-
+  ingredients = ingredients.reduce((acc, c) => {
+    if (acc[c.category]) {
+      acc[c.category].push(c);
+    } else {
+      acc[c.category] = [c];
+    }
+    return acc;
+  }, {});
+  console.log(ingredients);
   onsubmit = (e) => {
     e.preventDefault();
     let body = new FormData();
@@ -386,24 +394,29 @@ const ItemForm = ({
             Υλικά
           </label>
           <div className="relative px-3 ">
-            <ul id="choice">
-              {ingredients ? (
-                ingredients.map((i) => (
-                  <li key={i.ID}>
-                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                      <input
-                        type="checkbox"
-                        className="form-checkbox"
-                        onChange={(e) => onIngredientSelect(e, i.ID)}
-                      />
-                      <span className="ml-2">{i.name}</span>
-                    </label>
-                  </li>
-                ))
-              ) : (
-                <option>Δεν υπάρχει ακόμα </option>
-              )}
-            </ul>
+            {ingredients ? (
+              Object.keys(ingredients).map((i) => (
+                <div key={ingredients[i]}>
+                  <span>{i}</span>
+                  <ul>
+                    {ingredients[i].map((ing) => (
+                      <li key={ing.ID}>
+                        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                          <input
+                            type="checkbox"
+                            className="form-checkbox"
+                            onChange={(e) => onIngredientSelect(e, ing.ID)}
+                          />
+                          <span className="ml-2">{ing.name}</span>
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            ) : (
+              <span>Δεν υπάρχει ακόμα </span>
+            )}
           </div>
         </div>
       </div>
@@ -428,24 +441,29 @@ const ItemForm = ({
             Επιλογές Υλικών
           </label>
           <div className="relative px-3 ">
-            <ul id="choice">
-              {ingredients ? (
-                ingredients.map((i) => (
-                  <li key={i.ID}>
-                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                      <input
-                        type="checkbox"
-                        className="form-checkbox"
-                        onChange={(e) => onIngredientSelect(e, i.ID)}
-                      />
-                      <span className="ml-2">{i.name}</span>
-                    </label>
-                  </li>
-                ))
-              ) : (
-                <option>Δεν υπάρχει ακόμα </option>
-              )}
-            </ul>
+            {ingredients ? (
+              Object.keys(ingredients).map((i) => (
+                <div key={ingredients[i]}>
+                  <span>{i}</span>
+                  <ul>
+                    {ingredients[i].map((ing) => (
+                      <li key={ing.ID}>
+                        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                          <input
+                            type="checkbox"
+                            className="form-checkbox"
+                            onChange={(e) => onIngredientSelect(e, ing.ID)}
+                          />
+                          <span className="ml-2">{ing.name}</span>
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            ) : (
+              <span>Δεν υπάρχει ακόμα </span>
+            )}
           </div>
         </div>
       </div>
