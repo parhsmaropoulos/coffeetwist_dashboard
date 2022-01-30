@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { useState } from "react/cjs/react.development";
 import { post_request } from "../../actions/lib";
 import ToastNotification from "../ToastNotification";
 import OptionModal from "./OptionModal";
@@ -17,9 +18,6 @@ class CreateForm extends Component {
       notificationMessage: "",
     };
     this.onCreate = this.onCreate.bind(this);
-    this.setOpen = this.setOpen.bind(this);
-    this.onAdd = this.onAdd.bind(this);
-    this.onDeleteOption = this.onDeleteOption.bind(this);
   }
 
   componentDidMount() {
@@ -75,7 +73,9 @@ class CreateForm extends Component {
       }
     }
     this.setState({
+      options: [],
       loading: false,
+      item: {},
       showNotification: true,
       notificationType: notificationType,
       notificationMessage: message,
@@ -84,28 +84,6 @@ class CreateForm extends Component {
       this.props.onCreate();
     }
   };
-
-  setOpen() {
-    let open = this.state.open ? false : true;
-    this.setState({
-      open: open,
-    });
-  }
-  onAdd(value, price) {
-    let open = this.state.open ? false : true;
-    let options = this.state.options;
-    options.push({ name: value, price: price });
-    this.setState({
-      open: open,
-      options: options,
-    });
-  }
-
-  onDeleteOption(idx) {
-    this.setState({
-      options: this.state.options.splice(idx - 1, 1),
-    });
-  }
 
   render() {
     let page = this.props.page;
@@ -234,7 +212,6 @@ const ItemForm = ({
     }
     return acc;
   }, {});
-  console.log(ingredients);
   onsubmit = (e) => {
     e.preventDefault();
     let body = new FormData();
@@ -585,38 +562,40 @@ const CategoryForm = ({ isUpdate, item, onCreate, onUpdate }) => {
   );
 };
 
-const ChoiceForm = ({
-  isUpdate,
-  item,
-  onCreate,
-  onUpdate,
-  onDelete,
-  open,
-  setOpen,
-  onAdd,
-  options,
-}) => {
+const ChoiceForm = ({ isUpdate, item, onCreate, onUpdate, options }) => {
   let choice = {
-    name: isUpdate ? item.name : "",
-    description: isUpdate ? item.description : "",
-    multiple: isUpdate ? item.multiple : false,
-    required: isUpdate ? item.required : false,
-    options: isUpdate ? item.options : options,
+    name: item.name ? item.name : "",
+    description: item.description ? item.description : "",
+    multiple: item.multiple ? item.multiple : false,
+    required: item.required ? item.required : false,
+    options: item.options ? item.options : options,
   };
 
   function onMultipleChange() {
-    choice.multiple = true ? false : true;
+    choice.multiple = !choice.multiple;
   }
   function onRequiredChange() {
-    choice.multiple = true ? false : true;
+    choice.required = !choice.required;
+  }
+  const [open, setOpen] = useState(false);
+
+  function onAdd(value, price, item) {
+    choice.options.push({ name: value, price: price });
+    setOpen(!open);
+  }
+
+  function onDeleteOption(e, idx) {
+    choice.options.splice(idx, 1);
+    console.log(choice.options);
   }
 
   onchange = (e) => {
     choice[e.target.name] = e.target.value;
   };
   onsubmit = (e) => {
-    e.preventDefault();
-    isUpdate ? onUpdate(e, choice) : onCreate(e, choice);
+    // e.preventDefault();
+    // isUpdate ? onUpdate(e, choice) : onCreate(e, choice);
+    console.log(choice);
   };
   return (
     <form className="w-full max-w-lg items-center" onSubmit={onsubmit}>
@@ -673,25 +652,23 @@ const ChoiceForm = ({
           <span className="ml-2">Υποχρεωτική επιλογή</span>
         </label>
       </div>
-      {options ? (
-        options.map((o, idx) => {
-          return (
-            <ChoiceLabel
-              key={idx}
-              onDelete={() => onDelete(idx)}
-              name={o.name}
-              price={o.price}
-            />
-          );
-        })
-      ) : (
-        <></>
-      )}
-      <AddChoiceButton setOpen={setOpen} />
+      {choice.options.length > 0
+        ? choice.options.map((o, idx) => {
+            return (
+              <ChoiceLabel
+                key={idx}
+                onDelete={(e) => onDeleteOption(e, idx)}
+                name={o.name}
+                price={o.price}
+              />
+            );
+          })
+        : null}
+      <AddChoiceButton setOpen={(e) => setOpen(!open)} />
       <SaveButton onSubmit={(e) => onsubmit(e)} />
       <OptionModal
         open={open}
-        setOpen={setOpen}
+        setOpen={(e) => setOpen(!open)}
         onAdd={(value, price) => onAdd(value, price, item)}
       />
     </form>
@@ -863,12 +840,18 @@ const AddChoiceButton = ({ setOpen }) => {
   );
 };
 
-const ChoiceLabel = ({ onDelete, idx, name, price }) => {
+const ChoiceLabel = ({ onDelete, name, price }) => {
   return (
     <div className="px-4 py-3  text-left sm:px-6">
       <span className="w-1/2 px-3">{name}</span>
       <span className="w-1/2 px-3">{price.toFixed(2)}</span>
-      <button onClick={onDelete}>Cancel</button>
+      <button
+        type="button"
+        className="bg-red-400 hover:bg-red-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+        onClick={onDelete}
+      >
+        X
+      </button>
     </div>
   );
 };
