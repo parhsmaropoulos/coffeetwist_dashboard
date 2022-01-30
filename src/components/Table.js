@@ -131,40 +131,37 @@ class Table extends Component {
 export default Table;
 
 const ItemTable = ({ products, changeAvailability, selectedCategory }) => {
+  products =
+    products && products.filter((p) => p.category_id === selectedCategory);
   return (
     <>
-      {products
-        ? products.map((i, idx) => {
-            if (i.category_id === selectedCategory) {
-              return (
-                <tr key={idx}>
-                  <td className="p-3">
-                    <div className="text-left">{i.name}</div>
-                  </td>
-                  <td className="p-3">
-                    <div className="text-center text-green-500">
-                      {i.price.toFixed(2)} €
-                    </div>
-                  </td>
-                  <td className="p-3">
-                    <div className="text-center">
-                      <label className="switch">
-                        <input
-                          type="checkbox"
-                          checked={i.available}
-                          onChange={() => changeAvailability(i.ID)}
-                        />
-                        <span className="slider round"></span>
-                      </label>
-                    </div>
-                  </td>
-                </tr>
-              );
-            } else {
-              return null;
-            }
-          })
-        : null}
+      {products &&
+        products.map((i, idx) => {
+          return (
+            <tr key={idx}>
+              <td className="p-3">
+                <div className="text-left">{i.name}</div>
+              </td>
+              <td className="p-3">
+                <div className="text-center text-green-500">
+                  {i.price.toFixed(2)} €
+                </div>
+              </td>
+              <td className="p-3">
+                <div className="text-center">
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={i.available}
+                      onChange={() => changeAvailability(i.ID)}
+                    />
+                    <span className="slider round"></span>
+                  </label>
+                </div>
+              </td>
+            </tr>
+          );
+        })}
     </>
   );
 };
@@ -174,40 +171,38 @@ const IngredientsTable = ({
   changeAvailability,
   selectedCategory,
 }) => {
+  ingredients =
+    ingredients &&
+    ingredients.filter((ing) => ing.category === selectedCategory);
   return (
     <>
-      {ingredients
-        ? ingredients.map((i, idx) => {
-            if (i.category === selectedCategory) {
-              return (
-                <tr key={idx}>
-                  <td className="p-3">
-                    <div className="text-left">{i.name}</div>
-                  </td>
-                  <td className="p-3">
-                    <div className="text-center text-green-500">
-                      {i.price.toFixed(2)} €
-                    </div>
-                  </td>
-                  <td className="p-3">
-                    <div className="text-center">
-                      <label className="switch">
-                        <input
-                          type="checkbox"
-                          checked={i.available}
-                          onChange={() => changeAvailability(i.ID)}
-                        />
-                        <span className="slider round"></span>
-                      </label>
-                    </div>
-                  </td>
-                </tr>
-              );
-            } else {
-              return null;
-            }
-          })
-        : null}
+      {ingredients &&
+        ingredients.map((i, idx) => {
+          return (
+            <tr key={idx}>
+              <td className="p-3">
+                <div className="text-left">{i.name}</div>
+              </td>
+              <td className="p-3">
+                <div className="text-center text-green-500">
+                  {i.price.toFixed(2)} €
+                </div>
+              </td>
+              <td className="p-3">
+                <div className="text-center">
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={i.available}
+                      onChange={() => changeAvailability(i.ID)}
+                    />
+                    <span className="slider round"></span>
+                  </label>
+                </div>
+              </td>
+            </tr>
+          );
+        })}
     </>
   );
 };
