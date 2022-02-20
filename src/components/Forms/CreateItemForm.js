@@ -371,7 +371,7 @@ const ItemForm = ({
             Υλικά
           </label>
           <div className="relative px-3 ">
-            {ingredients ? (
+            {ingredients.length > 0 ? (
               Object.keys(ingredients).map((i) => (
                 <div key={ingredients[i]}>
                   <span>{i}</span>
@@ -418,7 +418,7 @@ const ItemForm = ({
             Επιλογές Υλικών
           </label>
           <div className="relative px-3 ">
-            {ingredients ? (
+            {ingredients.length > 0 ? (
               Object.keys(ingredients).map((i) => (
                 <div key={ingredients[i]}>
                   <span>{i}</span>
