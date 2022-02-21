@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { useState } from "react/cjs/react.development";
+import React, { Component, useState } from "react";
+
 import { post_request } from "../../actions/lib";
 import ToastNotification from "../ToastNotification";
 import OptionModal from "./OptionModal";
