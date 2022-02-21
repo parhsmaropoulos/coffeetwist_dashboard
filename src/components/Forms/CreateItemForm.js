@@ -1,5 +1,4 @@
 import React, { Component, useState } from "react";
-
 import { post_request } from "../../actions/lib";
 import ToastNotification from "../ToastNotification";
 import OptionModal from "./OptionModal";
@@ -571,31 +570,36 @@ const ChoiceForm = ({ isUpdate, item, onCreate, onUpdate, options }) => {
     options: item.options ? item.options : options,
   };
 
+  const [open, setOpen] = useState(false);
+  const [newChoice, setChoice] = useState(choice);
   function onMultipleChange() {
-    choice.multiple = !choice.multiple;
+    newChoice.multiple = !choice.multiple;
+    setChoice(newChoice);
   }
   function onRequiredChange() {
-    choice.required = !choice.required;
+    newChoice.required = !choice.required;
+    setChoice(newChoice);
   }
-  const [open, setOpen] = useState(false);
 
   function onAdd(value, price, item) {
-    choice.options.push({ name: value, price: price });
+    item.options.push({ name: value, price: price });
+    setChoice(item);
     setOpen(!open);
   }
 
   function onDeleteOption(e, idx) {
-    choice.options.splice(idx, 1);
-    console.log(choice.options);
+    newChoice.options = newChoice.options.filter((c, i) => i !== idx);
+    setChoice(newChoice);
   }
 
   onchange = (e) => {
-    choice[e.target.name] = e.target.value;
+    newChoice[e.target.name] = e.target.value;
+    setChoice(newChoice);
   };
   onsubmit = (e) => {
     // e.preventDefault();
     // isUpdate ? onUpdate(e, choice) : onCreate(e, choice);
-    console.log(choice);
+    console.log(newChoice);
   };
   return (
     <form className="w-full max-w-lg items-center" onSubmit={onsubmit}>
@@ -652,8 +656,8 @@ const ChoiceForm = ({ isUpdate, item, onCreate, onUpdate, options }) => {
           <span className="ml-2">Υποχρεωτική επιλογή</span>
         </label>
       </div>
-      {choice.options.length > 0
-        ? choice.options.map((o, idx) => {
+      {newChoice.options.length > 0
+        ? newChoice.options.map((o, idx) => {
             return (
               <ChoiceLabel
                 key={idx}
@@ -669,7 +673,8 @@ const ChoiceForm = ({ isUpdate, item, onCreate, onUpdate, options }) => {
       <OptionModal
         open={open}
         setOpen={(e) => setOpen(!open)}
-        onAdd={(value, price) => onAdd(value, price, item)}
+        onAdd={(value, price, item) => onAdd(value, price, item)}
+        choice={newChoice}
       />
     </form>
   );
