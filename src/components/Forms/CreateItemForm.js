@@ -598,8 +598,8 @@ const ChoiceForm = ({ isUpdate, item, onCreate, onUpdate, options }) => {
   };
   onsubmit = (e) => {
     // e.preventDefault();
-    // isUpdate ? onUpdate(e, choice) : onCreate(e, choice);
-    console.log(newChoice);
+    isUpdate ? onUpdate(e, choice) : onCreate(e, choice);
+    // console.log(newChoice);
   };
   return (
     <form className="w-full max-w-lg items-center" onSubmit={onsubmit}>
