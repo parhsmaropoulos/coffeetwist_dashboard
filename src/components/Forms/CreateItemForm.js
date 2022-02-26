@@ -370,9 +370,9 @@ const ItemForm = ({
             Υλικά
           </label>
           <div className="relative px-3 ">
-            {ingredients.length > 0 ? (
-              Object.keys(ingredients).map((i) => (
-                <div key={ingredients[i]}>
+            {ingredients ? (
+              Object.keys(ingredients).map((i, idx) => (
+                <div key={idx}>
                   <span>{i}</span>
                   <ul>
                     {ingredients[i].map((ing) => (
@@ -417,9 +417,9 @@ const ItemForm = ({
             Επιλογές Υλικών
           </label>
           <div className="relative px-3 ">
-            {ingredients.length > 0 ? (
-              Object.keys(ingredients).map((i) => (
-                <div key={ingredients[i]}>
+            {ingredients ? (
+              Object.keys(ingredients).map((i, indx) => (
+                <div key={indx}>
                   <span>{i}</span>
                   <ul>
                     {ingredients[i].map((ing) => (
@@ -598,7 +598,7 @@ const ChoiceForm = ({ isUpdate, item, onCreate, onUpdate, options }) => {
   };
   onsubmit = (e) => {
     // e.preventDefault();
-    isUpdate ? onUpdate(e, choice) : onCreate(e, choice);
+    isUpdate ? onUpdate(e, newChoice) : onCreate(e, newChoice);
     // console.log(newChoice);
   };
   return (
