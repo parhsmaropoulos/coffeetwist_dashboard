@@ -3,7 +3,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import { recipientHtml } from "../lib/receipt";
 class OrdersTable extends Component {
   constructor(props) {

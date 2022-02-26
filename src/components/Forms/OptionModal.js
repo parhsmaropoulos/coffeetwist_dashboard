@@ -1,9 +1,7 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 
 export default function OptionModal({ open, setOpen, onAdd, choice }) {
-  const [item, setItem] = useState(choice);
-
   const cancelButtonRef = useRef(null);
 
   function addChoice() {
@@ -16,7 +14,7 @@ export default function OptionModal({ open, setOpen, onAdd, choice }) {
       alert("Please enter name");
       return;
     }
-    onAdd(desc, parseFloat(price), item);
+    onAdd(desc, parseFloat(price), choice);
   }
   return (
     <Transition.Root show={open} as={Fragment}>
