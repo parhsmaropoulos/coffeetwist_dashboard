@@ -3,6 +3,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { Component } from "react";
+import { recipientHtml } from "../lib/receipt";
 class OrdersTable extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +13,9 @@ class OrdersTable extends Component {
       incoming: [],
       completed: [],
       selectedTime: 10,
+      selectedReciept: "",
     };
+    this.printOrder = this.printOrder.bind(this);
   }
 
   componentDidMount() {
@@ -29,14 +32,12 @@ class OrdersTable extends Component {
   }
 
   printOrder = (order) => {
-    let content = document.getElementById(`order-id-${order.ID}`);
-    content.classList.add("printable");
-    // let pri = document.getElementById("ifmcontentstoprint").contentWindow;
-    // pri.document.open();
-    // pri.document.write(content.innerHTML);
-    // pri.document.close();
-    // pri.focus();
-    // pri.print();
+    let orderRecieptHtml = recipientHtml(order);
+    const recieptWidnow = window.open();
+    recieptWidnow.document.write(orderRecieptHtml);
+    recieptWidnow.document.close();
+    recieptWidnow.focus();
+    recieptWidnow.print();
   };
 
   render() {
@@ -82,7 +83,7 @@ class OrdersTable extends Component {
                   }
                   completeOrder={(order) => this.props.completeOrder(order)}
                   rejectOrder={(order) => this.props.rejectOrder(order)}
-                  printOrder={(order) => this.props.printOrder(order)}
+                  printOrder={(order) => this.printOrder(order)}
                 />
               </tbody>
             </table>
