@@ -3,6 +3,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import { recipientHtml } from "../lib/receipt";
 class OrdersTable extends Component {
   constructor(props) {
@@ -108,6 +109,8 @@ const OrderTable = ({
     <>
       {orders &&
         orders.map((i, idx) => {
+          let fullAddess = `${i.client_address_name} ${i.client_address_number} ,
+          ${i.client_area_name} , ${i.client_zip}`;
           return (
             <tr key={idx} id={`order-id-${i.ID}`}>
               <td className="w-3/4 pb-20">
@@ -134,8 +137,21 @@ const OrderTable = ({
                         Διεύθυνση
                       </dt>
                       <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        {i.client_address_name} {i.client_address_number} ,{" "}
-                        {i.client_area_name} , {i.client_zip}
+                        {fullAddess}{" "}
+                        <a
+                          href={`https://www.google.com/maps/place/${encodeURIComponent(
+                            fullAddess
+                          )}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <button
+                            type="button"
+                            class="mr-2 bg-red-600 text-white p-2 rounded  leading-none flex items-center"
+                          >
+                            <i class="fa-solid fa-location-dot"></i>
+                          </button>
+                        </a>
                       </dd>
                     </div>
                     <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
